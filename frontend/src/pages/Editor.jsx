@@ -129,6 +129,9 @@ export default function Editor() {
           whatsapp,
           email,
           foto_url: fotoUrl,
+          archivo_negocio: archivoNegocio,
+          archivo_negocio_tipo: archivoNegocioTipo,
+          archivo_negocio_nombre: archivoNegocioNombre,
         },
         { withCredentials: true }
       );
