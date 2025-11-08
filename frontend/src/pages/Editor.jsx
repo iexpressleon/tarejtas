@@ -81,6 +81,41 @@ export default function Editor() {
     }
   };
 
+  const handleArchivoNegocioUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/jpg', 'application/pdf'];
+      if (!validTypes.includes(file.type)) {
+        toast.error("Solo se permiten archivos JPG o PDF");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("El archivo no debe superar 5MB");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        setArchivoNegocio(base64String);
+        setArchivoNegocioTipo(file.type.includes('pdf') ? 'pdf' : 'jpg');
+        setArchivoNegocioNombre(file.name);
+        toast.success(`Archivo ${file.name} cargado`);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeArchivoNegocio = () => {
+    setArchivoNegocio("");
+    setArchivoNegocioTipo("");
+    setArchivoNegocioNombre("");
+    toast.success("Archivo eliminado");
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
