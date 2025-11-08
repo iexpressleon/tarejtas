@@ -68,6 +68,9 @@ class Tarjeta(BaseModel):
     email: Optional[str] = ""
     foto_url: Optional[str] = ""
     qr_url: Optional[str] = ""
+    archivo_negocio: Optional[str] = ""  # PDF or JPG in base64
+    archivo_negocio_tipo: Optional[str] = ""  # 'pdf' or 'jpg'
+    archivo_negocio_nombre: Optional[str] = ""
     plantilla_id: int = 1
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
