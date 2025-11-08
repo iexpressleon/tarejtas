@@ -46,8 +46,18 @@ export default function TarjetaPublica() {
 
   const handleWhatsApp = () => {
     if (tarjeta?.whatsapp) {
-      const cleanNumber = tarjeta.whatsapp.replace(/[^0-9]/g, "");
-      window.open(`https://wa.me/${cleanNumber}`, "_blank");
+      try {
+        const cleanNumber = tarjeta.whatsapp.replace(/[^0-9]/g, "");
+        if (cleanNumber.length < 10) {
+          console.error("Número de WhatsApp inválido");
+          return;
+        }
+        const whatsappUrl = `https://wa.me/${cleanNumber}`;
+        console.log("Opening WhatsApp:", whatsappUrl);
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+      } catch (error) {
+        console.error("Error al abrir WhatsApp:", error);
+      }
     }
   };
 
