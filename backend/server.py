@@ -125,7 +125,7 @@ async def get_current_user(request: Request) -> Optional[User]:
     # Find valid session
     session = await db.user_sessions.find_one({
         "session_token": session_token,
-        "expires_at": {"$gt": datetime.now(timezone.utc)}
+        "expires_at": {"$gt": datetime.now(timezone.utc).isoformat()}
     })
     
     if not session:
