@@ -186,6 +186,21 @@ export default function TarjetaPublica() {
                   📱 WhatsApp
                 </button>
               )}
+              {tarjeta?.archivo_negocio && (
+                <button
+                  data-testid="archivo-negocio-btn"
+                  onClick={() => {
+                    const link = document.createElement('a');
+                    link.href = tarjeta.archivo_negocio;
+                    link.download = tarjeta.archivo_negocio_nombre || 'documento';
+                    link.click();
+                  }}
+                  className="w-full p-4 rounded-xl text-center font-semibold text-white hover:scale-105 transition-transform shadow-md"
+                  style={{ backgroundColor: colorTema }}
+                >
+                  {tarjeta.archivo_negocio_tipo === 'pdf' ? '📄' : '🖼️'} Ver {tarjeta.archivo_negocio_tipo === 'pdf' ? 'Catálogo' : 'Imagen'}
+                </button>
+              )}
             </div>
 
             {/* Enlaces */}
