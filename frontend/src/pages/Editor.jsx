@@ -27,6 +27,9 @@ export default function Editor() {
   const [email, setEmail] = useState("");
   const [fotoUrl, setFotoUrl] = useState("");
   const [fotoPreview, setFotoPreview] = useState("");
+  const [archivoNegocio, setArchivoNegocio] = useState("");
+  const [archivoNegocioTipo, setArchivoNegocioTipo] = useState("");
+  const [archivoNegocioNombre, setArchivoNegocioNombre] = useState("");
 
   useEffect(() => {
     loadData();
