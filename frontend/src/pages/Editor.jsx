@@ -347,6 +347,81 @@ export default function Editor() {
             </Card>
 
             <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl">
+              <h2 className="text-2xl font-bold mb-6">Información adicional</h2>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="archivo">Documento de negocio (JPG o PDF)</Label>
+                  <p className="text-sm text-gray-500 mt-1 mb-2">
+                    Sube un catálogo, menú, brochure u otro documento (máx. 5MB)
+                  </p>
+                  <Input
+                    id="archivo"
+                    data-testid="archivo-input"
+                    type="file"
+                    accept=".jpg,.jpeg,.pdf"
+                    onChange={handleArchivoNegocioUpload}
+                    className="mt-2"
+                  />
+                  {archivoNegocioNombre && (
+                    <div className="mt-3 flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">
+                          {archivoNegocioTipo === 'pdf' ? '📄' : '🖼️'}
+                        </span>
+                        <span className="text-sm font-medium">{archivoNegocioNombre}</span>
+                      </div>
+                      <Button
+                        data-testid="remove-archivo-btn"
+                        onClick={removeArchivoNegocio}
+                        variant="destructive"
+                        size="sm"
+                      >
+                        Eliminar
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl">
+              <h2 className="text-2xl font-bold mb-6">Código QR</h2>
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  Descarga el código QR de tu tarjeta para compartirlo en redes sociales,
+                  imprimirlo o agregarlo a materiales de marketing.
+                </p>
+                {tarjeta?.qr_url ? (
+                  <div className="flex flex-col items-center gap-4">
+                    <img
+                      src={tarjeta.qr_url}
+                      alt="QR Code"
+                      className="w-48 h-48 border-2 border-gray-200 rounded-lg"
+                    />
+                    <Button
+                      data-testid="download-qr-btn"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = tarjeta.qr_url;
+                        link.download = `qr-${tarjeta.slug}.png`;
+                        link.click();
+                        toast.success("QR descargado");
+                      }}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      📥 Descargar QR
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 py-4">
+                    Guarda los cambios para generar el código QR
+                  </div>
+                )}
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Enlaces</h2>
                 <Button
