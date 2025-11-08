@@ -190,10 +190,59 @@ export default function TarjetaPublica() {
                 <button
                   data-testid="archivo-negocio-btn"
                   onClick={() => {
-                    const link = document.createElement('a');
-                    link.href = tarjeta.archivo_negocio;
-                    link.download = tarjeta.archivo_negocio_nombre || 'documento';
-                    link.click();
+                    // Open in new window instead of downloading
+                    const newWindow = window.open();
+                    if (newWindow) {
+                      if (tarjeta.archivo_negocio_tipo === 'pdf') {
+                        // For PDF, create an iframe viewer
+                        newWindow.document.write(`
+                          <!DOCTYPE html>
+                          <html>
+                            <head>
+                              <title>${tarjeta.archivo_negocio_nombre || 'Documento'}</title>
+                              <style>
+                                body { margin: 0; padding: 0; overflow: hidden; }
+                                iframe { border: none; width: 100vw; height: 100vh; }
+                              </style>
+                            </head>
+                            <body>
+                              <iframe src="${tarjeta.archivo_negocio}"></iframe>
+                            </body>
+                          </html>
+                        `);
+                      } else {
+                        // For images, display centered
+                        newWindow.document.write(`
+                          <!DOCTYPE html>
+                          <html>
+                            <head>
+                              <title>${tarjeta.archivo_negocio_nombre || 'Imagen'}</title>
+                              <style>
+                                body { 
+                                  margin: 0; 
+                                  padding: 20px;
+                                  background: #000;
+                                  display: flex;
+                                  align-items: center;
+                                  justify-content: center;
+                                  min-height: 100vh;
+                                }
+                                img { 
+                                  max-width: 100%;
+                                  max-height: 100vh;
+                                  object-fit: contain;
+                                  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+                                }
+                              </style>
+                            </head>
+                            <body>
+                              <img src="${tarjeta.archivo_negocio}" alt="${tarjeta.archivo_negocio_nombre || 'Imagen'}" />
+                            </body>
+                          </html>
+                        `);
+                      }
+                      newWindow.document.close();
+                    }
                   }}
                   className="w-full p-4 rounded-xl text-center font-semibold text-white hover:scale-105 transition-transform shadow-md"
                   style={{ backgroundColor: colorTema }}
