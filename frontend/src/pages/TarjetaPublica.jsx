@@ -63,7 +63,13 @@ export default function TarjetaPublica() {
 
   const handleEmail = () => {
     if (tarjeta?.email) {
-      window.location.href = `mailto:${tarjeta.email}`;
+      try {
+        const mailtoUrl = `mailto:${tarjeta.email}`;
+        console.log("Opening email:", mailtoUrl);
+        window.location.href = mailtoUrl;
+      } catch (error) {
+        console.error("Error al abrir email:", error);
+      }
     }
   };
 
