@@ -81,6 +81,9 @@ class TarjetaCreate(BaseModel):
     whatsapp: Optional[str] = ""
     email: Optional[str] = ""
     foto_url: Optional[str] = ""
+    archivo_negocio: Optional[str] = ""
+    archivo_negocio_tipo: Optional[str] = ""
+    archivo_negocio_nombre: Optional[str] = ""
     plantilla_id: Optional[int] = 1
 
 class TarjetaUpdate(BaseModel):
@@ -90,6 +93,9 @@ class TarjetaUpdate(BaseModel):
     whatsapp: Optional[str] = None
     email: Optional[str] = None
     foto_url: Optional[str] = None
+    archivo_negocio: Optional[str] = None
+    archivo_negocio_tipo: Optional[str] = None
+    archivo_negocio_nombre: Optional[str] = None
     plantilla_id: Optional[int] = None
 
 class Enlace(BaseModel):
