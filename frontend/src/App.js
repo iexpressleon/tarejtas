@@ -1,11 +1,11 @@
 import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "@/pages/Landing";
-import Registro from "@/pages/Registro";
-import Dashboard from "@/pages/Dashboard";
-import Editor from "@/pages/Editor";
-import TarjetaPublica from "@/pages/TarjetaPublica";
-import Premium from "@/pages/Premium";
+import Landing from "@/pages/Landing.jsx";
+import Registro from "@/pages/Registro.jsx";
+import Dashboard from "@/pages/Dashboard.jsx";
+import Editor from "@/pages/Editor.jsx";
+import TarjetaPublica from "@/pages/TarjetaPublica.jsx";
+import Premium from "@/pages/Premium.jsx";
 import { Toaster } from "@/components/ui/sonner";
 
 function App() {
