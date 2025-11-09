@@ -44,6 +44,19 @@ export default function TarjetaPublica() {
     }
   };
 
+  const handlePhone = () => {
+    if (tarjeta?.telefono) {
+      try {
+        const cleanNumber = tarjeta.telefono.replace(/[^0-9+]/g, "");
+        const telUrl = `tel:${cleanNumber}`;
+        console.log("Opening phone:", telUrl);
+        window.location.href = telUrl;
+      } catch (error) {
+        console.error("Error al abrir teléfono:", error);
+      }
+    }
+  };
+
   const handleWhatsApp = () => {
     if (tarjeta?.whatsapp) {
       try {
@@ -75,11 +88,20 @@ export default function TarjetaPublica() {
 
   const handleEnlaceClick = (url) => {
     if (url) {
-      let finalUrl = url;
-      if (!url.startsWith("http://") && !url.startsWith("https://")) {
-        finalUrl = "https://" + url;
+      try {
+        let finalUrl = url.trim();
+        
+        // Check if it's already a complete URL
+        if (!finalUrl.startsWith("http://") && !finalUrl.startsWith("https://")) {
+          // Add https:// prefix
+          finalUrl = "https://" + finalUrl;
+        }
+        
+        console.log("Opening link:", finalUrl);
+        window.open(finalUrl, "_blank", "noopener,noreferrer");
+      } catch (error) {
+        console.error("Error al abrir enlace:", error);
       }
-      window.open(finalUrl, "_blank");
     }
   };
 
