@@ -530,6 +530,14 @@ export default function Editor() {
 
                 {/* Contact Buttons */}
                 <div className="space-y-3">
+                  {telefono && (
+                    <div
+                      className="p-4 rounded-xl text-center font-semibold"
+                      style={{ backgroundColor: colorTema, color: "white" }}
+                    >
+                      📞 Llamar
+                    </div>
+                  )}
                   {email && (
                     <div
                       className="p-4 rounded-xl text-center font-semibold"
