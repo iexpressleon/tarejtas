@@ -11,6 +11,10 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import httpx
 import re
+from passlib.context import CryptContext
+
+# Password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
