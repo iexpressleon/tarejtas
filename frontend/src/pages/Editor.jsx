@@ -324,6 +324,20 @@ export default function Editor() {
               <h2 className="text-2xl font-bold mb-6">Contacto</h2>
               <div className="space-y-4">
                 <div>
+                  <Label htmlFor="telefono">Teléfono</Label>
+                  <Input
+                    id="telefono"
+                    data-testid="telefono-input"
+                    value={telefono}
+                    onChange={(e) => setTelefono(e.target.value)}
+                    placeholder="+52 1234567890"
+                    className="mt-2"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Los usuarios podrán llamarte directamente desde su móvil
+                  </p>
+                </div>
+                <div>
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
