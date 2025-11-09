@@ -60,6 +60,15 @@ class SessionData(BaseModel):
     picture: Optional[str] = None
     session_token: str
 
+class UserRegister(BaseModel):
+    name: str
+    email: str
+    password: str
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
 class Tarjeta(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
