@@ -78,6 +78,7 @@ class Tarjeta(BaseModel):
     nombre: str
     descripcion: Optional[str] = ""
     color_tema: str = "#6366f1"
+    telefono: Optional[str] = ""  # Phone number for calling
     whatsapp: Optional[str] = ""
     email: Optional[str] = ""
     foto_url: Optional[str] = ""
