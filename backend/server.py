@@ -181,74 +181,63 @@ def generate_slug(nombre: str) -> str:
 
 # ============ AUTH ENDPOINTS ============
 
-@api_router.post("/auth/session")
-async def process_session(request: Request, response: Response):
-    """Process session_id from Emergent Auth"""
-    body = await request.json()
-    session_id = body.get("session_id")
+@api_router.post("/auth/register")
+async def register(user_input: UserRegister, response: Response):
+    """Register new user with email and password"""
+    # Check if user already exists
+    existing_user = await db.users.find_one({"email": user_input.email}, {"_id": 0})
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
     
-    if not session_id:
-        raise HTTPException(status_code=400, detail="session_id required")
+    # Validate password length
+    if len(user_input.password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
     
-    # Call Emergent Auth API
-    async with httpx.AsyncClient() as client:
-        try:
-            auth_response = await client.get(
-                "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
-                headers={"X-Session-ID": session_id},
-                timeout=10.0
-            )
-            auth_response.raise_for_status()
-            session_data = auth_response.json()
-        except Exception as e:
-            logger.error(f"Auth API error: {e}")
-            raise HTTPException(status_code=400, detail="Invalid session_id")
+    # Create new user
+    user_id = str(uuid.uuid4())
+    password_hash = pwd_context.hash(user_input.password)
     
-    # Check if user exists
-    existing_user = await db.users.find_one({"email": session_data["email"]}, {"_id": 0})
+    user_data = {
+        "id": user_id,
+        "email": user_input.email,
+        "name": user_input.name,
+        "password_hash": password_hash,
+        "picture": "",
+        "plan": "free",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.users.insert_one(user_data)
     
-    if not existing_user:
-        # Create new user
-        user_data = {
-            "id": session_data["id"],
-            "email": session_data["email"],
-            "name": session_data["name"],
-            "picture": session_data.get("picture"),
-            "plan": "free",
-            "created_at": datetime.now(timezone.utc).isoformat()
-        }
-        await db.users.insert_one(user_data)
-        
-        # Create default tarjeta for new user
-        slug = generate_slug(session_data["name"])
-        # Check if slug exists, add number if needed
-        existing_slug = await db.tarjetas.find_one({"slug": slug})
-        if existing_slug:
-            slug = f"{slug}-{str(uuid.uuid4())[:8]}"
-        
-        tarjeta_data = {
-            "id": str(uuid.uuid4()),
-            "usuario_id": session_data["id"],
-            "slug": slug,
-            "nombre": session_data["name"],
-            "descripcion": "",
-            "color_tema": "#6366f1",
-            "whatsapp": "",
-            "email": session_data["email"],
-            "foto_url": session_data.get("picture", ""),
-            "qr_url": "",
-            "plantilla_id": 1,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        }
-        await db.tarjetas.insert_one(tarjeta_data)
-        user_id = session_data["id"]
-    else:
-        user_id = existing_user["id"]
+    # Create default tarjeta for new user
+    slug = generate_slug(user_input.name)
+    existing_slug = await db.tarjetas.find_one({"slug": slug})
+    if existing_slug:
+        slug = f"{slug}-{str(uuid.uuid4())[:8]}"
     
-    # Store session
+    tarjeta_data = {
+        "id": str(uuid.uuid4()),
+        "usuario_id": user_id,
+        "slug": slug,
+        "nombre": user_input.name,
+        "descripcion": "",
+        "color_tema": "#6366f1",
+        "whatsapp": "",
+        "email": user_input.email,
+        "foto_url": "",
+        "qr_url": "",
+        "archivo_negocio": "",
+        "archivo_negocio_tipo": "",
+        "archivo_negocio_nombre": "",
+        "plantilla_id": 1,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.tarjetas.insert_one(tarjeta_data)
+    
+    # Create session
+    session_token = str(uuid.uuid4())
     session_doc = {
         "user_id": user_id,
-        "session_token": session_data["session_token"],
+        "session_token": session_token,
         "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
         "created_at": datetime.now(timezone.utc).isoformat()
     }
@@ -257,7 +246,7 @@ async def process_session(request: Request, response: Response):
     # Set httpOnly cookie
     response.set_cookie(
         key="session_token",
-        value=session_data["session_token"],
+        value=session_token,
         httponly=True,
         secure=True,
         samesite="none",
@@ -265,7 +254,46 @@ async def process_session(request: Request, response: Response):
         max_age=7*24*60*60
     )
     
-    return {"success": True, "user_id": user_id}
+    return {"success": True, "user_id": user_id, "message": "Registration successful"}
+
+@api_router.post("/auth/login")
+async def login(user_input: UserLogin, response: Response):
+    """Login user with email and password"""
+    # Find user
+    user = await db.users.find_one({"email": user_input.email}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    # Check if user has password (not OAuth user)
+    if not user.get("password_hash"):
+        raise HTTPException(status_code=400, detail="This account uses Google login")
+    
+    # Verify password
+    if not pwd_context.verify(user_input.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    # Create session
+    session_token = str(uuid.uuid4())
+    session_doc = {
+        "user_id": user["id"],
+        "session_token": session_token,
+        "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.user_sessions.insert_one(session_doc)
+    
+    # Set httpOnly cookie
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        path="/",
+        max_age=7*24*60*60
+    )
+    
+    return {"success": True, "user_id": user["id"], "message": "Login successful"}
 
 @api_router.get("/auth/me")
 async def get_me(request: Request):
