@@ -1,22 +1,26 @@
 import requests
 import sys
+import os
 from datetime import datetime, timezone, timedelta
 from pymongo import MongoClient
 import uuid
 
 class TarjetaDigitalAPITester:
-    def __init__(self, base_url="https://digital-profile-14.preview.emergentagent.com"):
-        self.base_url = base_url
-        self.api = f"{base_url}/api"
+    def __init__(self, base_url=None):
+        # Use environment variable or default to localhost for testing
+        self.base_url = base_url or os.environ.get('TEST_BASE_URL', 'http://localhost:8001')
+        self.api = f"{self.base_url}/api"
         self.session_token = None
         self.user_id = None
         self.tests_run = 0
         self.tests_passed = 0
         self.test_results = []
         
-        # MongoDB connection
-        self.mongo_client = MongoClient("mongodb://localhost:27017")
-        self.db = self.mongo_client["test_database"]
+        # MongoDB connection - use environment variable
+        mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+        db_name = os.environ.get('DB_NAME', 'test_database')
+        self.mongo_client = MongoClient(mongo_url)
+        self.db = self.mongo_client[db_name]
 
     def log_result(self, test_name, passed, message=""):
         """Log test result"""
