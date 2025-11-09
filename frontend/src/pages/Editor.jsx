@@ -128,6 +128,7 @@ export default function Editor() {
           nombre,
           descripcion,
           color_tema: colorTema,
+          telefono,
           whatsapp,
           email,
           foto_url: fotoUrl,
