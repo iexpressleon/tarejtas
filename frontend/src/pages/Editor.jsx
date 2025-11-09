@@ -48,6 +48,7 @@ export default function Editor() {
       setNombre(t.nombre);
       setDescripcion(t.descripcion || "");
       setColorTema(t.color_tema || "#6366f1");
+      setTelefono(t.telefono || "");
       setWhatsapp(t.whatsapp || "");
       setEmail(t.email || "");
       setFotoUrl(t.foto_url || "");
