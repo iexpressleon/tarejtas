@@ -93,6 +93,7 @@ class TarjetaCreate(BaseModel):
     nombre: str
     descripcion: Optional[str] = ""
     color_tema: Optional[str] = "#6366f1"
+    telefono: Optional[str] = ""
     whatsapp: Optional[str] = ""
     email: Optional[str] = ""
     foto_url: Optional[str] = ""
@@ -105,6 +106,7 @@ class TarjetaUpdate(BaseModel):
     nombre: Optional[str] = None
     descripcion: Optional[str] = None
     color_tema: Optional[str] = None
+    telefono: Optional[str] = None
     whatsapp: Optional[str] = None
     email: Optional[str] = None
     foto_url: Optional[str] = None
