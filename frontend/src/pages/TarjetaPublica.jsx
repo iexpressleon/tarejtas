@@ -188,6 +188,16 @@ export default function TarjetaPublica() {
 
             {/* Contact Buttons */}
             <div className="space-y-3">
+              {tarjeta?.telefono && (
+                <button
+                  data-testid="phone-btn"
+                  onClick={handlePhone}
+                  className="w-full p-4 rounded-xl text-center font-semibold text-white hover:scale-105 transition-transform shadow-md"
+                  style={{ backgroundColor: colorTema }}
+                >
+                  📞 Llamar
+                </button>
+              )}
               {tarjeta?.email && (
                 <button
                   data-testid="email-btn"
