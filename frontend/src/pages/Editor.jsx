@@ -23,6 +23,7 @@ export default function Editor() {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [colorTema, setColorTema] = useState("#6366f1");
+  const [telefono, setTelefono] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [email, setEmail] = useState("");
   const [fotoUrl, setFotoUrl] = useState("");
