@@ -107,6 +107,7 @@ class TarjetaCreate(BaseModel):
     archivo_negocio: Optional[str] = ""
     archivo_negocio_tipo: Optional[str] = ""
     archivo_negocio_nombre: Optional[str] = ""
+    archivo_negocio_titulo: Optional[str] = ""
     plantilla_id: Optional[int] = 1
 
 class TarjetaUpdate(BaseModel):
