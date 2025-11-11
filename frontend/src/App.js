@@ -6,6 +6,7 @@ import Dashboard from "@/pages/Dashboard.jsx";
 import Editor from "@/pages/Editor.jsx";
 import TarjetaPublica from "@/pages/TarjetaPublica.jsx";
 import Premium from "@/pages/Premium.jsx";
+import AdminDashboard from "@/pages/AdminDashboard.jsx";
 import { Toaster } from "@/components/ui/sonner";
 
 function App() {
