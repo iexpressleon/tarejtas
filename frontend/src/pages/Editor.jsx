@@ -137,6 +137,7 @@ export default function Editor() {
           archivo_negocio: archivoNegocio,
           archivo_negocio_tipo: archivoNegocioTipo,
           archivo_negocio_nombre: archivoNegocioNombre,
+          archivo_negocio_titulo: archivoNegocioTitulo,
         },
         { withCredentials: true }
       );
