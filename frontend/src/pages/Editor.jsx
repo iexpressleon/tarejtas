@@ -31,6 +31,7 @@ export default function Editor() {
   const [archivoNegocio, setArchivoNegocio] = useState("");
   const [archivoNegocioTipo, setArchivoNegocioTipo] = useState("");
   const [archivoNegocioNombre, setArchivoNegocioNombre] = useState("");
+  const [archivoNegocioTitulo, setArchivoNegocioTitulo] = useState("");
 
   useEffect(() => {
     loadData();
