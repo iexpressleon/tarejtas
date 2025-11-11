@@ -179,6 +179,41 @@ async def require_auth(request: Request) -> User:
     user = await get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    # Check if user is active
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Account disabled. Please contact support.")
+    
+    # Check license expiration
+    now = datetime.now(timezone.utc)
+    
+    if user.plan == "trial" and user.trial_ends_at:
+        trial_end = datetime.fromisoformat(user.trial_ends_at)
+        if now > trial_end:
+            # Trial expired - disable user and notify
+            await db.users.update_one(
+                {"id": user.id},
+                {"$set": {"is_active": False, "plan": "expired"}}
+            )
+            raise HTTPException(status_code=403, detail="Trial period expired. Please subscribe to continue.")
+    
+    elif user.plan == "paid" and user.subscription_ends_at:
+        sub_end = datetime.fromisoformat(user.subscription_ends_at)
+        if now > sub_end:
+            # Subscription expired
+            await db.users.update_one(
+                {"id": user.id},
+                {"$set": {"is_active": False, "plan": "expired"}}
+            )
+            raise HTTPException(status_code=403, detail="Subscription expired. Please renew to continue.")
+    
+    return user
+
+async def require_admin(request: Request) -> User:
+    """Require admin role"""
+    user = await require_auth(request)
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
     return user
 
 def generate_slug(nombre: str) -> str:
