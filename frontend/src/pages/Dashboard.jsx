@@ -123,20 +123,72 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-12">
         {/* User Info */}
         <div className="mb-12">
-          <div className="flex items-center gap-4 mb-6">
-            {user?.picture && (
-              <img
-                src={user.picture}
-                alt={user.name}
-                className="w-16 h-16 rounded-full border-2 border-gray-200"
-              />
-            )}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                ¡Hola, {user?.name}!
-              </h1>
-              <p className="text-gray-600">{user?.email}</p>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
+            <div className="flex items-center gap-4">
+              {user?.picture && (
+                <img
+                  src={user.picture}
+                  alt={user.name}
+                  className="w-16 h-16 rounded-full border-2 border-gray-200"
+                />
+              )}
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  ¡Hola, {user?.name}!
+                </h1>
+                <p className="text-gray-600">{user?.email}</p>
+              </div>
             </div>
+
+            {/* License Info */}
+            {user && (
+              <Card className="p-4 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-xl">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      user.plan === 'trial' ? 'bg-blue-100 text-blue-800' :
+                      user.plan === 'paid' ? 'bg-green-100 text-green-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {user.plan === 'trial' ? 'Período de Prueba' :
+                       user.plan === 'paid' ? 'Suscripción Activa' :
+                       'Expirado'}
+                    </span>
+                  </div>
+                  <div className="text-sm">
+                    {user.plan === 'trial' && user.trial_ends_at && (
+                      <p className="text-gray-600">
+                        Vence: <span className="font-semibold">
+                          {new Date(user.trial_ends_at).toLocaleDateString('es-MX')}
+                        </span>
+                      </p>
+                    )}
+                    {user.plan === 'paid' && user.subscription_ends_at && (
+                      <p className="text-gray-600">
+                        Vence: <span className="font-semibold">
+                          {new Date(user.subscription_ends_at).toLocaleDateString('es-MX')}
+                        </span>
+                      </p>
+                    )}
+                    {user.plan === 'expired' && (
+                      <p className="text-red-600 font-semibold">
+                        Por favor renueva tu suscripción
+                      </p>
+                    )}
+                  </div>
+                  {user.role === 'admin' && (
+                    <Button
+                      data-testid="admin-panel-btn"
+                      onClick={() => navigate("/admin")}
+                      size="sm"
+                      className="w-full bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700"
+                    >
+                      ⚡ Panel Admin
+                    </Button>
+                  )}
+                </div>
+              </Card>
+            )}
           </div>
         </div>
 
