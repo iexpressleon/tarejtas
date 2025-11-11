@@ -21,6 +21,7 @@ function App() {
           <Route path="/editor/:id" element={<Editor />} />
           <Route path="/t/:slug" element={<TarjetaPublica />} />
           <Route path="/premium" element={<Premium />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
     </div>
