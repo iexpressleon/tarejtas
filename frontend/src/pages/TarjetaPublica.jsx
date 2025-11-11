@@ -53,74 +53,82 @@ export default function TarjetaPublica() {
 
   const handlePhone = () => {
     if (tarjeta?.telefono) {
-      try {
-        const cleanNumber = tarjeta.telefono.replace(/[^0-9+]/g, "");
-        const telUrl = `tel:${cleanNumber}`;
-        console.log("Opening phone:", telUrl);
-        
-        // Try to open in new window, fallback to location.href
-        const newWindow = window.open(telUrl, "_blank", "width=400,height=300");
-        if (!newWindow) {
-          window.location.href = telUrl;
-        }
-      } catch (error) {
-        console.error("Error al abrir teléfono:", error);
-        window.location.href = `tel:${tarjeta.telefono}`;
-      }
+      const cleanNumber = tarjeta.telefono.replace(/[^0-9+]/g, "");
+      const telUrl = `tel:${cleanNumber}`;
+      
+      setModalType("phone");
+      setModalContent(telUrl);
+      setModalTitle(tarjeta.telefono);
+      setModalOpen(true);
+      
+      // Also trigger the tel: link automatically
+      setTimeout(() => {
+        window.location.href = telUrl;
+      }, 500);
     }
   };
 
   const handleWhatsApp = () => {
     if (tarjeta?.whatsapp) {
-      try {
-        const cleanNumber = tarjeta.whatsapp.replace(/[^0-9]/g, "");
-        if (cleanNumber.length < 10) {
-          console.error("Número de WhatsApp inválido");
-          return;
-        }
-        const whatsappUrl = `https://wa.me/${cleanNumber}`;
-        console.log("Opening WhatsApp:", whatsappUrl);
-        window.open(whatsappUrl, "_blank", "noopener,noreferrer,width=800,height=600");
-      } catch (error) {
-        console.error("Error al abrir WhatsApp:", error);
+      const cleanNumber = tarjeta.whatsapp.replace(/[^0-9]/g, "");
+      if (cleanNumber.length < 10) {
+        return;
       }
+      const whatsappUrl = `https://wa.me/${cleanNumber}`;
+      
+      setModalType("whatsapp");
+      setModalContent(whatsappUrl);
+      setModalTitle("WhatsApp");
+      setModalOpen(true);
+      
+      // Also open in background
+      setTimeout(() => {
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+      }, 500);
     }
   };
 
   const handleEmail = () => {
     if (tarjeta?.email) {
-      try {
-        const mailtoUrl = `mailto:${tarjeta.email}`;
-        console.log("Opening email:", mailtoUrl);
-        
-        // Try to open in new window, fallback to location.href
-        const newWindow = window.open(mailtoUrl, "_blank", "width=600,height=400");
-        if (!newWindow) {
-          window.location.href = mailtoUrl;
-        }
-      } catch (error) {
-        console.error("Error al abrir email:", error);
-        window.location.href = `mailto:${tarjeta.email}`;
-      }
+      const mailtoUrl = `mailto:${tarjeta.email}`;
+      
+      setModalType("email");
+      setModalContent(mailtoUrl);
+      setModalTitle(tarjeta.email);
+      setModalOpen(true);
+      
+      // Also trigger the mailto: link automatically
+      setTimeout(() => {
+        window.location.href = mailtoUrl;
+      }, 500);
     }
   };
 
   const handleEnlaceClick = (url) => {
     if (url) {
-      try {
-        let finalUrl = url.trim();
-        
-        // Check if it's already a complete URL
-        if (!finalUrl.startsWith("http://") && !finalUrl.startsWith("https://")) {
-          // Add https:// prefix
-          finalUrl = "https://" + finalUrl;
-        }
-        
-        console.log("Opening link:", finalUrl);
-        window.open(finalUrl, "_blank", "noopener,noreferrer");
-      } catch (error) {
-        console.error("Error al abrir enlace:", error);
+      let finalUrl = url.trim();
+      
+      if (!finalUrl.startsWith("http://") && !finalUrl.startsWith("https://")) {
+        finalUrl = "https://" + finalUrl;
       }
+      
+      setModalType("iframe");
+      setModalContent(finalUrl);
+      setModalTitle("Enlace");
+      setModalOpen(true);
+    }
+  };
+  
+  const handleArchivoClick = () => {
+    if (tarjeta?.archivo_negocio) {
+      const tipo = tarjeta.archivo_negocio_tipo === "pdf" ? "pdf" : "image";
+      const titulo = tarjeta.archivo_negocio_titulo || 
+                     (tipo === "pdf" ? "Documento PDF" : "Imagen");
+      
+      setModalType(tipo);
+      setModalContent(tarjeta.archivo_negocio);
+      setModalTitle(titulo);
+      setModalOpen(true);
     }
   };
 
