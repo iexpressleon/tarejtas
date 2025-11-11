@@ -307,6 +307,15 @@ export default function TarjetaPublica() {
           </div>
         )}
       </div>
+
+      {/* Content Modal */}
+      <ContentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        type={modalType}
+        content={modalContent}
+        title={modalTitle}
+      />
     </div>
   );
 }
