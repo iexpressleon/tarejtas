@@ -362,6 +362,106 @@ async def logout(request: Request, response: Response):
     response.delete_cookie(key="session_token", path="/")
     return {"success": True}
 
+# ============ ADMIN ENDPOINTS ============
+
+@api_router.get("/admin/users")
+async def get_all_users(request: Request):
+    """Get all users (admin only)"""
+    await require_admin(request)
+    
+    users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(1000)
+    
+    # Convert dates
+    for user in users:
+        if isinstance(user.get('created_at'), str):
+            user['created_at'] = datetime.fromisoformat(user['created_at'])
+    
+    return users
+
+@api_router.put("/admin/users/{user_id}/toggle-active")
+async def toggle_user_active(user_id: str, request: Request):
+    """Enable/disable user account"""
+    await require_admin(request)
+    
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    new_status = not user.get("is_active", True)
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {"is_active": new_status}}
+    )
+    
+    return {"success": True, "is_active": new_status}
+
+@api_router.put("/admin/users/{user_id}/extend-subscription")
+async def extend_subscription(user_id: str, request: Request):
+    """Extend user subscription by 1 year"""
+    await require_admin(request)
+    
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Calculate new expiration date (1 year from now)
+    new_expiration = datetime.now(timezone.utc) + timedelta(days=365)
+    
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {
+            "plan": "paid",
+            "subscription_ends_at": new_expiration.isoformat(),
+            "is_active": True,
+            "payment_notified": False
+        }}
+    )
+    
+    return {"success": True, "subscription_ends_at": new_expiration.isoformat()}
+
+@api_router.post("/admin/users/{user_id}/regenerate-license")
+async def regenerate_license(user_id: str, request: Request):
+    """Generate new license key for user"""
+    await require_admin(request)
+    
+    new_license = str(uuid.uuid4())
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {"license_key": new_license}}
+    )
+    
+    return {"success": True, "license_key": new_license}
+
+@api_router.get("/admin/stats")
+async def get_admin_stats(request: Request):
+    """Get admin dashboard statistics"""
+    await require_admin(request)
+    
+    total_users = await db.users.count_documents({})
+    active_users = await db.users.count_documents({"is_active": True})
+    trial_users = await db.users.count_documents({"plan": "trial"})
+    paid_users = await db.users.count_documents({"plan": "paid"})
+    expired_users = await db.users.count_documents({"plan": "expired"})
+    
+    # Users expiring soon (within 7 days)
+    soon_date = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
+    expiring_soon = await db.users.count_documents({
+        "is_active": True,
+        "$or": [
+            {"trial_ends_at": {"$lte": soon_date}},
+            {"subscription_ends_at": {"$lte": soon_date}}
+        ]
+    })
+    
+    return {
+        "total_users": total_users,
+        "active_users": active_users,
+        "trial_users": trial_users,
+        "paid_users": paid_users,
+        "expired_users": expired_users,
+        "expiring_soon": expiring_soon
+    }
+
 # ============ TARJETAS ENDPOINTS ============
 
 @api_router.get("/tarjetas", response_model=List[Tarjeta])
