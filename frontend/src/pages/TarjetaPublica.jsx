@@ -50,9 +50,15 @@ export default function TarjetaPublica() {
         const cleanNumber = tarjeta.telefono.replace(/[^0-9+]/g, "");
         const telUrl = `tel:${cleanNumber}`;
         console.log("Opening phone:", telUrl);
-        window.location.href = telUrl;
+        
+        // Try to open in new window, fallback to location.href
+        const newWindow = window.open(telUrl, "_blank", "width=400,height=300");
+        if (!newWindow) {
+          window.location.href = telUrl;
+        }
       } catch (error) {
         console.error("Error al abrir teléfono:", error);
+        window.location.href = `tel:${tarjeta.telefono}`;
       }
     }
   };
@@ -67,7 +73,7 @@ export default function TarjetaPublica() {
         }
         const whatsappUrl = `https://wa.me/${cleanNumber}`;
         console.log("Opening WhatsApp:", whatsappUrl);
-        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer,width=800,height=600");
       } catch (error) {
         console.error("Error al abrir WhatsApp:", error);
       }
@@ -79,9 +85,15 @@ export default function TarjetaPublica() {
       try {
         const mailtoUrl = `mailto:${tarjeta.email}`;
         console.log("Opening email:", mailtoUrl);
-        window.location.href = mailtoUrl;
+        
+        // Try to open in new window, fallback to location.href
+        const newWindow = window.open(mailtoUrl, "_blank", "width=600,height=400");
+        if (!newWindow) {
+          window.location.href = mailtoUrl;
+        }
       } catch (error) {
         console.error("Error al abrir email:", error);
+        window.location.href = `mailto:${tarjeta.email}`;
       }
     }
   };
