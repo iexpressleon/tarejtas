@@ -383,21 +383,34 @@ export default function Editor() {
                     className="mt-2"
                   />
                   {archivoNegocioNombre && (
-                    <div className="mt-3 flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <span className="text-2xl">
-                          {archivoNegocioTipo === 'pdf' ? '📄' : '🖼️'}
-                        </span>
-                        <span className="text-sm font-medium">{archivoNegocioNombre}</span>
+                    <div className="mt-3 space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">
+                            {archivoNegocioTipo === 'pdf' ? '📄' : '🖼️'}
+                          </span>
+                          <span className="text-sm font-medium">{archivoNegocioNombre}</span>
+                        </div>
+                        <Button
+                          data-testid="remove-archivo-btn"
+                          onClick={removeArchivoNegocio}
+                          variant="destructive"
+                          size="sm"
+                        >
+                          Eliminar
+                        </Button>
                       </div>
-                      <Button
-                        data-testid="remove-archivo-btn"
-                        onClick={removeArchivoNegocio}
-                        variant="destructive"
-                        size="sm"
-                      >
-                        Eliminar
-                      </Button>
+                      <div>
+                        <Label htmlFor="titulo-archivo">Título del botón</Label>
+                        <Input
+                          id="titulo-archivo"
+                          data-testid="titulo-archivo-input"
+                          value={archivoNegocioTitulo}
+                          onChange={(e) => setArchivoNegocioTitulo(e.target.value)}
+                          placeholder="Ej: Ver Catálogo, Descargar Menú, etc."
+                          className="mt-2"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
