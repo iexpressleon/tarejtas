@@ -282,6 +282,7 @@ async def register(user_input: UserRegister, response: Response):
         "archivo_negocio": "",
         "archivo_negocio_tipo": "",
         "archivo_negocio_nombre": "",
+        "archivo_negocio_titulo": "",
         "plantilla_id": 1,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
