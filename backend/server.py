@@ -121,6 +121,7 @@ class TarjetaUpdate(BaseModel):
     archivo_negocio: Optional[str] = None
     archivo_negocio_tipo: Optional[str] = None
     archivo_negocio_nombre: Optional[str] = None
+    archivo_negocio_titulo: Optional[str] = None
     plantilla_id: Optional[int] = None
 
 class Enlace(BaseModel):
