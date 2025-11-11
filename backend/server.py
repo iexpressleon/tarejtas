@@ -92,6 +92,7 @@ class Tarjeta(BaseModel):
     archivo_negocio: Optional[str] = ""  # PDF or JPG in base64
     archivo_negocio_tipo: Optional[str] = ""  # 'pdf' or 'jpg'
     archivo_negocio_nombre: Optional[str] = ""
+    archivo_negocio_titulo: Optional[str] = ""  # Custom button title
     plantilla_id: int = 1
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
