@@ -44,7 +44,13 @@ class User(BaseModel):
     name: str
     password_hash: Optional[str] = None  # For password-based auth
     picture: Optional[str] = None
-    plan: str = "free"
+    plan: str = "trial"  # trial, paid, expired
+    role: str = "user"  # user, admin
+    license_key: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    trial_ends_at: Optional[str] = None  # ISO datetime
+    subscription_ends_at: Optional[str] = None  # ISO datetime
+    is_active: bool = True
+    payment_notified: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class UserSession(BaseModel):
