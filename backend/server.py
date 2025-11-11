@@ -202,9 +202,10 @@ async def register(user_input: UserRegister, response: Response):
     if len(user_input.password) < 6:
         raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
     
-    # Create new user
+    # Create new user with trial period (1 month)
     user_id = str(uuid.uuid4())
     password_hash = pwd_context.hash(user_input.password)
+    trial_ends = datetime.now(timezone.utc) + timedelta(days=30)
     
     user_data = {
         "id": user_id,
@@ -212,7 +213,13 @@ async def register(user_input: UserRegister, response: Response):
         "name": user_input.name,
         "password_hash": password_hash,
         "picture": "",
-        "plan": "free",
+        "plan": "trial",
+        "role": "user",
+        "license_key": str(uuid.uuid4()),
+        "trial_ends_at": trial_ends.isoformat(),
+        "subscription_ends_at": None,
+        "is_active": True,
+        "payment_notified": False,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.users.insert_one(user_data)
