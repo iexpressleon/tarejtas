@@ -15,6 +15,12 @@ export default function TarjetaPublica() {
   const [enlaces, setEnlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("");
+  const [modalContent, setModalContent] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
 
   useEffect(() => {
     loadTarjeta();
