@@ -57,6 +57,7 @@ export default function Editor() {
       setArchivoNegocio(t.archivo_negocio || "");
       setArchivoNegocioTipo(t.archivo_negocio_tipo || "");
       setArchivoNegocioNombre(t.archivo_negocio_nombre || "");
+      setArchivoNegocioTitulo(t.archivo_negocio_titulo || "");
       setEnlaces(enlacesRes.data);
     } catch (error) {
       console.error("Error loading data:", error);
