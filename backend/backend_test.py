@@ -670,6 +670,17 @@ class TarjetaDigitalAPITester:
         print("📱 PRIORITY 2: QR CODE & PUBLIC CARD TESTS")
         print("=" * 40)
         
+        # Recreate user session since it was invalidated during password reset tests
+        self.session_token = f"new_user_session_{int(datetime.now().timestamp())}"
+        session_doc = {
+            "user_id": self.regular_user_id,
+            "session_token": self.session_token,
+            "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        self.db.user_sessions.insert_one(session_doc)
+        print("🔧 Recreated user session for QR tests")
+        
         # Need to create a card first for QR testing
         self.test_create_tarjeta()
         self.test_get_tarjeta_by_slug_public()
