@@ -197,8 +197,6 @@ metadata:
 test_plan:
   current_focus:
     - "Admin Password Reset UI"
-    - "Password Reset Endpoint"
-    - "QR Code Generation"
     - "Public Card View (QR Target)"
   stuck_tasks: []
   test_all: false
