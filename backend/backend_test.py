@@ -9,11 +9,24 @@ from passlib.context import CryptContext
 
 class TarjetaDigitalAPITester:
     def __init__(self, base_url=None):
-        # Use environment variable or default to localhost for testing
-        self.base_url = base_url or os.environ.get('TEST_BASE_URL', 'http://localhost:8001')
+        # Use REACT_APP_BACKEND_URL from frontend/.env
+        if not base_url:
+            try:
+                with open('/app/frontend/.env', 'r') as f:
+                    for line in f:
+                        if line.startswith('REACT_APP_BACKEND_URL='):
+                            base_url = line.split('=', 1)[1].strip()
+                            break
+            except:
+                pass
+        
+        self.base_url = base_url or 'https://bizcard-digital-1.preview.emergentagent.com'
         self.api = f"{self.base_url}/api"
         self.session_token = None
+        self.admin_session_token = None
         self.user_id = None
+        self.admin_user_id = None
+        self.regular_user_id = None
         self.tests_run = 0
         self.tests_passed = 0
         self.test_results = []
@@ -23,6 +36,9 @@ class TarjetaDigitalAPITester:
         db_name = os.environ.get('DB_NAME', 'test_database')
         self.mongo_client = MongoClient(mongo_url)
         self.db = self.mongo_client[db_name]
+        
+        # Password context for verification
+        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     def log_result(self, test_name, passed, message=""):
         """Log test result"""
