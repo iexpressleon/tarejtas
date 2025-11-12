@@ -73,7 +73,7 @@ class TarjetaDigitalAPITester:
                 "id": self.admin_user_id,
                 "email": f"admin.{timestamp}@example.com",
                 "name": "Test Admin",
-                "password_hash": self.pwd_context.hash("admin123"),
+                "password_hash": bcrypt.hashpw("admin123".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
                 "picture": "https://via.placeholder.com/150",
                 "plan": "paid",
                 "role": "admin",
