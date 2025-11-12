@@ -61,6 +61,13 @@ export default function Landing() {
               digital y moderna
             </span>
           </h1>
+          
+          {/* Pricing Banner */}
+          <div className="inline-block bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl shadow-lg">
+            <div className="text-3xl font-bold mb-1">🎉 30 días GRATIS</div>
+            <div className="text-lg">Después solo $300 pesos al año</div>
+          </div>
+          
           <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
             Crea tu perfil profesional en minutos. Comparte tu información de contacto,
             redes sociales y enlaces importantes con un solo link.
