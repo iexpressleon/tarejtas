@@ -529,7 +529,7 @@ class TarjetaDigitalAPITester:
                         # Verify it's not stored in plaintext
                         if user["password_hash"] != new_password:
                             # Verify the hash is valid
-                            if self.pwd_context.verify(new_password, user["password_hash"]):
+                            if bcrypt.checkpw(new_password.encode('utf-8'), user["password_hash"].encode('utf-8')):
                                 return self.log_result("Password Reset Success", True, "Password reset and properly hashed")
                             else:
                                 return self.log_result("Password Reset Success", False, "Password hash verification failed")
