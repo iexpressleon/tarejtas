@@ -101,3 +101,103 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: |
+  Complete three pending tasks for TarjetaDigital application:
+  1. Password Reset Feature - Allow admin to reset user passwords from AdminDashboard
+  2. QR Code Bug - Fix QR code linking issue (reportedly leads to wrong URL)
+  3. Mercado Pago Integration - Implement payment workflow for $300/year subscriptions (test mode)
+
+backend:
+  - task: "Password Reset Endpoint"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Backend endpoint already exists at PUT /api/admin/users/{user_id}/reset-password. Accepts new_password in request body, validates length >= 6, hashes password with bcrypt, updates user, and invalidates all user sessions."
+
+  - task: "QR Code Generation"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "QR code generation endpoint exists at POST /api/tarjetas/{tarjeta_id}/generate-qr. Uses FRONTEND_URL env var and creates QR with api.qrserver.com. Need to test if QR codes link correctly to public cards."
+
+  - task: "Mercado Pago Payment Integration"
+    implemented: false
+    working: false
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Not yet implemented. SDK is installed (mercadopago==2.3.0). Need to create endpoints for: 1) Generate payment preference ($300/year), 2) Webhook for payment notifications, 3) Update user plan/subscription after successful payment."
+
+frontend:
+  - task: "Admin Password Reset UI"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/AdminDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added Reset Password button for each user in admin panel. Created modal with password input field (min 6 chars). Admin can type custom password. On submit, calls PUT /api/admin/users/{user_id}/reset-password. Shows success/error toasts."
+
+  - task: "Public Card View (QR Target)"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/TarjetaPublica.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Public card route exists at /t/:slug. Component fetches card data using slug from URL params. Need to verify QR codes correctly link to this route."
+
+  - task: "Payment Flow UI"
+    implemented: false
+    working: false
+    file: "frontend/src/pages/Premium.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Premium page exists but payment button shows placeholder toast. Need to integrate Mercado Pago payment button that creates preference and redirects to payment page. Update pricing from $9.99/month to $300/year."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Admin Password Reset UI"
+    - "Password Reset Endpoint"
+    - "QR Code Generation"
+    - "Public Card View (QR Target)"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Phase 1 (Password Reset) completed. Added UI in AdminDashboard with Reset button and modal. Backend endpoint already existed. Ready for backend testing to verify: 1) Admin auth check, 2) Password validation, 3) Password hashing, 4) Session invalidation. Then need to investigate QR code issue and implement Mercado Pago."
