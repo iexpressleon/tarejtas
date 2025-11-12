@@ -549,6 +549,16 @@ class TarjetaDigitalAPITester:
         print("\n📝 Testing session invalidation after password reset...")
         
         try:
+            # Create a fresh session for the regular user to test invalidation
+            fresh_session_token = f"fresh_session_{int(datetime.now().timestamp())}"
+            fresh_session_doc = {
+                "user_id": self.regular_user_id,
+                "session_token": fresh_session_token,
+                "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            self.db.user_sessions.insert_one(fresh_session_doc)
+            
             # Count sessions before reset
             sessions_before = self.db.user_sessions.count_documents({"user_id": self.regular_user_id})
             
