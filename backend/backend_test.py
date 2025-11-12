@@ -61,38 +61,75 @@ class TarjetaDigitalAPITester:
         })
         return passed
 
-    def setup_test_user(self):
-        """Create test user and session in MongoDB"""
-        print("\n🔧 Setting up test user and session...")
+    def setup_test_users(self):
+        """Create test admin and regular users with sessions in MongoDB"""
+        print("\n🔧 Setting up test users and sessions...")
         
         try:
-            # Create test user
-            self.user_id = f"test-user-{int(datetime.now().timestamp())}"
-            user_doc = {
-                "id": self.user_id,
-                "email": f"test.user.{int(datetime.now().timestamp())}@example.com",
-                "name": "Test User",
+            timestamp = int(datetime.now().timestamp())
+            
+            # Create admin user
+            self.admin_user_id = f"test-admin-{timestamp}"
+            admin_doc = {
+                "id": self.admin_user_id,
+                "email": f"admin.{timestamp}@example.com",
+                "name": "Test Admin",
+                "password_hash": self.pwd_context.hash("admin123"),
                 "picture": "https://via.placeholder.com/150",
-                "plan": "free",
+                "plan": "paid",
+                "role": "admin",
+                "license_key": str(uuid.uuid4()),
+                "is_active": True,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            self.db.users.insert_one(admin_doc)
+            print(f"✅ Created admin user: {self.admin_user_id}")
+            
+            # Create admin session
+            self.admin_session_token = f"admin_session_{timestamp}"
+            admin_session_doc = {
+                "user_id": self.admin_user_id,
+                "session_token": self.admin_session_token,
+                "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            self.db.user_sessions.insert_one(admin_session_doc)
+            print(f"✅ Created admin session: {self.admin_session_token}")
+            
+            # Create regular user
+            self.regular_user_id = f"test-user-{timestamp}"
+            user_doc = {
+                "id": self.regular_user_id,
+                "email": f"user.{timestamp}@example.com",
+                "name": "Test User",
+                "password_hash": self.pwd_context.hash("user123"),
+                "picture": "https://via.placeholder.com/150",
+                "plan": "trial",
+                "role": "user",
+                "license_key": str(uuid.uuid4()),
+                "is_active": True,
                 "created_at": datetime.now(timezone.utc).isoformat()
             }
             self.db.users.insert_one(user_doc)
-            print(f"✅ Created test user: {self.user_id}")
+            print(f"✅ Created regular user: {self.regular_user_id}")
             
-            # Create session
-            self.session_token = f"test_session_{int(datetime.now().timestamp())}"
+            # Create regular user session
+            self.session_token = f"user_session_{timestamp}"
             session_doc = {
-                "user_id": self.user_id,
+                "user_id": self.regular_user_id,
                 "session_token": self.session_token,
                 "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
                 "created_at": datetime.now(timezone.utc).isoformat()
             }
             self.db.user_sessions.insert_one(session_doc)
-            print(f"✅ Created session: {self.session_token}")
+            print(f"✅ Created user session: {self.session_token}")
+            
+            # Set user_id for backward compatibility
+            self.user_id = self.regular_user_id
             
             return True
         except Exception as e:
-            print(f"❌ Error setting up test user: {e}")
+            print(f"❌ Error setting up test users: {e}")
             return False
 
     def cleanup_test_data(self):
