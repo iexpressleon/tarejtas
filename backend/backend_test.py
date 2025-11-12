@@ -456,6 +456,165 @@ class TarjetaDigitalAPITester:
         except Exception as e:
             return self.log_result("DELETE /api/tarjetas/{id}", False, str(e))
 
+    def test_password_reset_admin_auth_required(self):
+        """Test that password reset requires admin authentication"""
+        print("\n📝 Testing password reset requires admin auth...")
+        
+        try:
+            payload = {"new_password": "newpass123"}
+            
+            # Test with no auth
+            response = requests.put(
+                f"{self.api}/admin/users/{self.regular_user_id}/reset-password",
+                json=payload
+            )
+            
+            if response.status_code == 401:
+                # Test with regular user auth (should fail)
+                response = requests.put(
+                    f"{self.api}/admin/users/{self.regular_user_id}/reset-password",
+                    json=payload,
+                    headers={"Authorization": f"Bearer {self.session_token}"}
+                )
+                
+                if response.status_code == 403:
+                    return self.log_result("Password Reset Admin Auth", True, "Correctly requires admin role")
+                else:
+                    return self.log_result("Password Reset Admin Auth", False, f"Regular user got status {response.status_code}")
+            else:
+                return self.log_result("Password Reset Admin Auth", False, f"No auth got status {response.status_code}")
+        except Exception as e:
+            return self.log_result("Password Reset Admin Auth", False, str(e))
+
+    def test_password_reset_validation(self):
+        """Test password validation (minimum 6 characters)"""
+        print("\n📝 Testing password validation...")
+        
+        try:
+            # Test with short password
+            payload = {"new_password": "123"}
+            response = requests.put(
+                f"{self.api}/admin/users/{self.regular_user_id}/reset-password",
+                json=payload,
+                headers={"Authorization": f"Bearer {self.admin_session_token}"}
+            )
+            
+            if response.status_code == 400:
+                return self.log_result("Password Validation", True, "Correctly rejects short passwords")
+            else:
+                return self.log_result("Password Validation", False, f"Short password got status {response.status_code}")
+        except Exception as e:
+            return self.log_result("Password Validation", False, str(e))
+
+    def test_password_reset_success(self):
+        """Test successful password reset and verify hashing"""
+        print("\n📝 Testing successful password reset...")
+        
+        try:
+            new_password = "newpass123"
+            payload = {"new_password": new_password}
+            
+            # Reset password
+            response = requests.put(
+                f"{self.api}/admin/users/{self.regular_user_id}/reset-password",
+                json=payload,
+                headers={"Authorization": f"Bearer {self.admin_session_token}"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    # Verify password is hashed in database
+                    user = self.db.users.find_one({"id": self.regular_user_id})
+                    if user and user.get("password_hash"):
+                        # Verify it's not stored in plaintext
+                        if user["password_hash"] != new_password:
+                            # Verify the hash is valid
+                            if self.pwd_context.verify(new_password, user["password_hash"]):
+                                return self.log_result("Password Reset Success", True, "Password reset and properly hashed")
+                            else:
+                                return self.log_result("Password Reset Success", False, "Password hash verification failed")
+                        else:
+                            return self.log_result("Password Reset Success", False, "Password stored in plaintext")
+                    else:
+                        return self.log_result("Password Reset Success", False, "No password hash found in database")
+                else:
+                    return self.log_result("Password Reset Success", False, "Success not confirmed")
+            else:
+                return self.log_result("Password Reset Success", False, f"Status {response.status_code}: {response.text}")
+        except Exception as e:
+            return self.log_result("Password Reset Success", False, str(e))
+
+    def test_password_reset_session_invalidation(self):
+        """Test that user sessions are invalidated after password reset"""
+        print("\n📝 Testing session invalidation after password reset...")
+        
+        try:
+            # Count sessions before reset
+            sessions_before = self.db.user_sessions.count_documents({"user_id": self.regular_user_id})
+            
+            # Reset password
+            payload = {"new_password": "anotherpass123"}
+            response = requests.put(
+                f"{self.api}/admin/users/{self.regular_user_id}/reset-password",
+                json=payload,
+                headers={"Authorization": f"Bearer {self.admin_session_token}"}
+            )
+            
+            if response.status_code == 200:
+                # Check sessions after reset
+                sessions_after = self.db.user_sessions.count_documents({"user_id": self.regular_user_id})
+                
+                if sessions_after == 0 and sessions_before > 0:
+                    return self.log_result("Session Invalidation", True, f"All {sessions_before} sessions invalidated")
+                else:
+                    return self.log_result("Session Invalidation", False, f"Sessions before: {sessions_before}, after: {sessions_after}")
+            else:
+                return self.log_result("Session Invalidation", False, f"Password reset failed: {response.status_code}")
+        except Exception as e:
+            return self.log_result("Session Invalidation", False, str(e))
+
+    def test_qr_code_url_verification(self):
+        """Test QR code URL generation and verification"""
+        print("\n📝 Testing QR code URL verification...")
+        
+        if not hasattr(self, 'test_tarjeta_id') or not hasattr(self, 'test_tarjeta_slug'):
+            return self.log_result("QR Code URL Verification", False, "No test tarjeta created")
+        
+        try:
+            # Generate QR code
+            response = requests.post(
+                f"{self.api}/tarjetas/{self.test_tarjeta_id}/generate-qr",
+                headers={"Authorization": f"Bearer {self.session_token}"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                qr_url = data.get("qr_url")
+                
+                if qr_url and "qrserver.com" in qr_url:
+                    # Extract the data parameter from QR URL
+                    if "data=" in qr_url:
+                        encoded_url = qr_url.split("data=")[1]
+                        # URL decode
+                        import urllib.parse
+                        decoded_url = urllib.parse.unquote(encoded_url)
+                        
+                        # Check if it points to correct frontend route
+                        expected_path = f"/t/{self.test_tarjeta_slug}"
+                        if expected_path in decoded_url and self.base_url in decoded_url:
+                            return self.log_result("QR Code URL Verification", True, f"QR points to correct URL: {decoded_url}")
+                        else:
+                            return self.log_result("QR Code URL Verification", False, f"QR URL incorrect: {decoded_url}")
+                    else:
+                        return self.log_result("QR Code URL Verification", False, "No data parameter in QR URL")
+                else:
+                    return self.log_result("QR Code URL Verification", False, "Invalid QR URL format")
+            else:
+                return self.log_result("QR Code URL Verification", False, f"QR generation failed: {response.status_code}")
+        except Exception as e:
+            return self.log_result("QR Code URL Verification", False, str(e))
+
     def test_logout(self):
         """Test POST /api/auth/logout"""
         print("\n📝 Testing logout...")
