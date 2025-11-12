@@ -36,8 +36,8 @@ class TarjetaDigitalAPITester:
         self.mongo_client = MongoClient(mongo_url)
         self.db = self.mongo_client[db_name]
         
-        # Password context for verification
-        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        # For password hashing and verification
+        pass
 
     def log_result(self, test_name, passed, message=""):
         """Log test result"""
