@@ -7,7 +7,7 @@
       {
         "issue": "CORS configuration incompatible with credentials",
         "details": "Backend had CORS_ORIGINS='*' which is incompatible with withCredentials=true. Changed to specific origins.",
-        "fix_applied": "Updated /app/backend/.env to include specific origins: 'https://digital-profile-14.preview.emergentagent.com,https://4ce71941-3917-4de1-9312-8cdd323a746d.preview.emergentagent.com'",
+        "fix_applied": "Updated /app/backend/.env to include specific origins: 'https://bizcard-digital-1.preview.emergentagent.com,https://bizcard-digital-1.preview.emergentagent.com'",
         "status": "FIXED"
       }
     ]
