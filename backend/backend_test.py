@@ -749,8 +749,14 @@ class TarjetaDigitalAPITester:
             return 1
 
 def main():
+    import sys
     tester = TarjetaDigitalAPITester()
-    return tester.run_all_tests()
+    
+    # Check if priority flag is passed
+    if len(sys.argv) > 1 and sys.argv[1] == "--priority":
+        return tester.run_priority_tests()
+    else:
+        return tester.run_all_tests()
 
 if __name__ == "__main__":
     sys.exit(main())
