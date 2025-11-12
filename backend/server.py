@@ -466,6 +466,35 @@ async def get_admin_stats(request: Request):
         "expiring_soon": expiring_soon
     }
 
+class PasswordReset(BaseModel):
+    new_password: str
+
+@api_router.put("/admin/users/{user_id}/reset-password")
+async def reset_user_password(user_id: str, password_data: PasswordReset, request: Request):
+    """Reset user password (admin only)"""
+    await require_admin(request)
+    
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Validate password length
+    if len(password_data.new_password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+    
+    # Hash new password
+    new_password_hash = pwd_context.hash(password_data.new_password)
+    
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {"password_hash": new_password_hash}}
+    )
+    
+    # Invalidate all user sessions to force re-login
+    await db.user_sessions.delete_many({"user_id": user_id})
+    
+    return {"success": True, "message": "Password reset successfully"}
+
 # ============ TARJETAS ENDPOINTS ============
 
 @api_router.get("/tarjetas", response_model=List[Tarjeta])
