@@ -388,6 +388,47 @@ export default function AdminDashboard() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Password Reset Dialog */}
+      <AlertDialog open={showPasswordReset} onOpenChange={() => {
+        setShowPasswordReset(false);
+        setResetPasswordUser(null);
+        setNewPassword("");
+      }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Resetear Contraseña</AlertDialogTitle>
+            <AlertDialogDescription>
+              Ingresa una nueva contraseña para <strong>{resetPasswordUser?.name}</strong>. El usuario deberá usar esta contraseña para iniciar sesión.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="py-4">
+            <Input
+              data-testid="new-password-input"
+              type="password"
+              placeholder="Nueva contraseña (mínimo 6 caracteres)"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleResetPassword();
+                }
+              }}
+              className="w-full"
+            />
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-testid="cancel-password-reset-btn">Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              data-testid="confirm-password-reset-btn"
+              onClick={handleResetPassword}
+              className="bg-indigo-600 hover:bg-indigo-700"
+            >
+              Resetear Contraseña
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
