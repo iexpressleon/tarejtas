@@ -113,6 +113,28 @@ export default function AdminDashboard() {
     setSelectedUser(null);
   };
 
+  const handleResetPassword = async () => {
+    if (!newPassword || newPassword.length < 6) {
+      toast.error("La contraseña debe tener al menos 6 caracteres");
+      return;
+    }
+
+    try {
+      await axios.put(
+        `${API}/admin/users/${resetPasswordUser.id}/reset-password`,
+        { new_password: newPassword },
+        { withCredentials: true }
+      );
+      toast.success(`Contraseña actualizada para ${resetPasswordUser.name}`);
+      setShowPasswordReset(false);
+      setResetPasswordUser(null);
+      setNewPassword("");
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      toast.error(error.response?.data?.detail || "Error al resetear contraseña");
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
