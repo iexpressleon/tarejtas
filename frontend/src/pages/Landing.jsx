@@ -190,10 +190,6 @@ export default function Landing() {
                     <span className="font-bold">✓</span>
                     <span>Sin límites de uso</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="font-bold">✓</span>
-                    <span>Cancela cuando quieras</span>
-                  </li>
                 </ul>
               </div>
             </Card>
