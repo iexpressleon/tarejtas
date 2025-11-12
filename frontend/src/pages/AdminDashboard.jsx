@@ -298,7 +298,7 @@ export default function AdminDashboard() {
                         </span>
                       </td>
                       <td className="p-3">
-                        <div className="flex gap-2 justify-center">
+                        <div className="flex gap-2 justify-center flex-wrap">
                           <Button
                             data-testid={`toggle-user-btn-${user.id}`}
                             onClick={() => {
@@ -321,6 +321,19 @@ export default function AdminDashboard() {
                             className="bg-green-50 hover:bg-green-100"
                           >
                             + 1 Año
+                          </Button>
+                          <Button
+                            data-testid={`reset-password-btn-${user.id}`}
+                            onClick={() => {
+                              setResetPasswordUser(user);
+                              setShowPasswordReset(true);
+                              setNewPassword("");
+                            }}
+                            variant="outline"
+                            size="sm"
+                            className="bg-blue-50 hover:bg-blue-100"
+                          >
+                            🔑 Reset
                           </Button>
                         </div>
                       </td>
