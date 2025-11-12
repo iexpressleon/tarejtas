@@ -136,11 +136,18 @@ class TarjetaDigitalAPITester:
         """Clean up test data from MongoDB"""
         print("\n🧹 Cleaning up test data...")
         try:
-            if self.user_id:
-                self.db.users.delete_many({"id": self.user_id})
-                self.db.user_sessions.delete_many({"user_id": self.user_id})
-                self.db.tarjetas.delete_many({"usuario_id": self.user_id})
-                print("✅ Test data cleaned up")
+            # Clean up admin user data
+            if self.admin_user_id:
+                self.db.users.delete_many({"id": self.admin_user_id})
+                self.db.user_sessions.delete_many({"user_id": self.admin_user_id})
+                
+            # Clean up regular user data
+            if self.regular_user_id:
+                self.db.users.delete_many({"id": self.regular_user_id})
+                self.db.user_sessions.delete_many({"user_id": self.regular_user_id})
+                self.db.tarjetas.delete_many({"usuario_id": self.regular_user_id})
+                
+            print("✅ Test data cleaned up")
         except Exception as e:
             print(f"⚠️ Error cleaning up: {e}")
 
