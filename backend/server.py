@@ -578,7 +578,7 @@ async def generate_qr(tarjeta_id: str, request: Request):
         raise HTTPException(status_code=404, detail="Tarjeta not found")
     
     # Generate QR URL using external API
-    frontend_url = os.environ.get('REACT_APP_BACKEND_URL', '').replace('/api', '')
+    frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
     tarjeta_url = f"{frontend_url}/t/{tarjeta['slug']}"
     qr_url = f"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={tarjeta_url}"
     
