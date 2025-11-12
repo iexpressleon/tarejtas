@@ -101,7 +101,7 @@ class TarjetaDigitalAPITester:
                 "id": self.regular_user_id,
                 "email": f"user.{timestamp}@example.com",
                 "name": "Test User",
-                "password_hash": self.pwd_context.hash("user123"),
+                "password_hash": bcrypt.hashpw("user123".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
                 "picture": "https://via.placeholder.com/150",
                 "plan": "trial",
                 "role": "user",
