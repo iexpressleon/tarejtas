@@ -30,7 +30,7 @@ export default function AdminDashboard() {
   const [actionType, setActionType] = useState(null);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [newPassword, setNewPassword] = useState("");
-  const [generatedPassword, setGeneratedPassword] = useState("");
+  const [resetPasswordUser, setResetPasswordUser] = useState(null);
 
   useEffect(() => {
     loadData();
