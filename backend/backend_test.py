@@ -636,29 +636,100 @@ class TarjetaDigitalAPITester:
         except Exception as e:
             return self.log_result("POST /api/auth/logout", False, str(e))
 
-    def run_all_tests(self):
-        """Run all tests in sequence"""
+    def run_priority_tests(self):
+        """Run priority tests for password reset and QR code functionality"""
         print("=" * 60)
-        print("🚀 Starting TarjetaDigital API Tests")
+        print("🚀 Starting TarjetaDigital Priority API Tests")
         print("=" * 60)
         
         # Setup
-        if not self.setup_test_user():
-            print("\n❌ Failed to setup test user. Aborting tests.")
+        if not self.setup_test_users():
+            print("\n❌ Failed to setup test users. Aborting tests.")
             return 1
         
-        # Run tests in order
+        # Priority 1: Password Reset Tests
+        print("\n" + "=" * 40)
+        print("🔐 PRIORITY 1: PASSWORD RESET TESTS")
+        print("=" * 40)
+        self.test_password_reset_admin_auth_required()
+        self.test_password_reset_validation()
+        self.test_password_reset_success()
+        self.test_password_reset_session_invalidation()
+        
+        # Priority 2: QR Code and Public Card Tests
+        print("\n" + "=" * 40)
+        print("📱 PRIORITY 2: QR CODE & PUBLIC CARD TESTS")
+        print("=" * 40)
+        
+        # Need to create a card first for QR testing
+        self.test_create_tarjeta()
+        self.test_get_tarjeta_by_slug_public()
+        self.test_generate_qr()
+        self.test_qr_code_url_verification()
+        
+        # Cleanup
+        self.cleanup_test_data()
+        
+        # Summary
+        print("\n" + "=" * 60)
+        print(f"📊 Priority Test Summary: {self.tests_passed}/{self.tests_run} tests passed")
+        print("=" * 60)
+        
+        if self.tests_passed == self.tests_run:
+            print("✅ All priority tests passed!")
+            return 0
+        else:
+            print(f"❌ {self.tests_run - self.tests_passed} priority test(s) failed")
+            return 1
+
+    def run_all_tests(self):
+        """Run all tests in sequence"""
+        print("=" * 60)
+        print("🚀 Starting TarjetaDigital Complete API Tests")
+        print("=" * 60)
+        
+        # Setup
+        if not self.setup_test_users():
+            print("\n❌ Failed to setup test users. Aborting tests.")
+            return 1
+        
+        # Priority tests first
+        print("\n" + "=" * 40)
+        print("🔐 PRIORITY 1: PASSWORD RESET TESTS")
+        print("=" * 40)
+        self.test_password_reset_admin_auth_required()
+        self.test_password_reset_validation()
+        self.test_password_reset_success()
+        self.test_password_reset_session_invalidation()
+        
+        # Basic API tests
+        print("\n" + "=" * 40)
+        print("📋 BASIC API TESTS")
+        print("=" * 40)
         self.test_auth_me()
         self.test_get_tarjetas()
         self.test_create_tarjeta()
         self.test_get_tarjeta_by_id()
         self.test_update_tarjeta()
+        
+        # QR and public card tests
+        print("\n" + "=" * 40)
+        print("📱 PRIORITY 2: QR CODE & PUBLIC CARD TESTS")
+        print("=" * 40)
         self.test_get_tarjeta_by_slug_public()
         self.test_generate_qr()
+        self.test_qr_code_url_verification()
+        
+        # Enlaces tests
+        print("\n" + "=" * 40)
+        print("🔗 ENLACES TESTS")
+        print("=" * 40)
         self.test_create_enlace()
         self.test_get_enlaces()
         self.test_update_enlace()
         self.test_delete_enlace()
+        
+        # Cleanup tests
         self.test_delete_tarjeta()
         self.test_logout()
         
@@ -667,7 +738,7 @@ class TarjetaDigitalAPITester:
         
         # Summary
         print("\n" + "=" * 60)
-        print(f"📊 Test Summary: {self.tests_passed}/{self.tests_run} tests passed")
+        print(f"📊 Complete Test Summary: {self.tests_passed}/{self.tests_run} tests passed")
         print("=" * 60)
         
         if self.tests_passed == self.tests_run:
