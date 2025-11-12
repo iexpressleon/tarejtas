@@ -4,7 +4,6 @@ import os
 from datetime import datetime, timezone, timedelta
 from pymongo import MongoClient
 import uuid
-import bcrypt
 from passlib.context import CryptContext
 
 class TarjetaDigitalAPITester:
