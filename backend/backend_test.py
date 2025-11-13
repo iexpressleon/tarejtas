@@ -883,6 +883,60 @@ class TarjetaDigitalAPITester:
         except Exception as e:
             return self.log_result("POST /api/auth/logout", False, str(e))
 
+    def run_new_features_tests(self):
+        """Run tests for new features: Domain/CORS, Mercado Pago, Admin Delete, Webhook"""
+        print("=" * 60)
+        print("🚀 Starting TarjetaDigital New Features API Tests")
+        print("=" * 60)
+        
+        # Setup
+        if not self.setup_test_users():
+            print("\n❌ Failed to setup test users. Aborting tests.")
+            return 1
+        
+        # Priority 1: Domain and CORS Configuration
+        print("\n" + "=" * 40)
+        print("🌐 PRIORITY 1: DOMAIN & CORS CONFIGURATION")
+        print("=" * 40)
+        self.test_cors_configuration()
+        
+        # Priority 2: Mercado Pago Payment Integration
+        print("\n" + "=" * 40)
+        print("💳 PRIORITY 2: MERCADO PAGO PAYMENT INTEGRATION")
+        print("=" * 40)
+        self.test_payment_preference_auth_required()
+        self.test_payment_preference_user_validation()
+        self.test_payment_preference_creation()
+        
+        # Priority 3: Admin Delete User Functionality
+        print("\n" + "=" * 40)
+        print("🗑️ PRIORITY 3: ADMIN DELETE USER FUNCTIONALITY")
+        print("=" * 40)
+        self.test_admin_delete_user_auth_required()
+        self.test_admin_delete_user_self_prevention()
+        self.test_admin_delete_user_success()
+        
+        # Priority 4: Webhook Endpoint
+        print("\n" + "=" * 40)
+        print("🔗 PRIORITY 4: WEBHOOK ENDPOINT")
+        print("=" * 40)
+        self.test_webhook_endpoint_exists()
+        
+        # Cleanup
+        self.cleanup_test_data()
+        
+        # Summary
+        print("\n" + "=" * 60)
+        print(f"📊 New Features Test Summary: {self.tests_passed}/{self.tests_run} tests passed")
+        print("=" * 60)
+        
+        if self.tests_passed == self.tests_run:
+            print("✅ All new features tests passed!")
+            return 0
+        else:
+            print(f"❌ {self.tests_run - self.tests_passed} new features test(s) failed")
+            return 1
+
     def run_priority_tests(self):
         """Run priority tests for password reset and QR code functionality"""
         print("=" * 60)
