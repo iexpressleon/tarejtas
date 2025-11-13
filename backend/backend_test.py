@@ -889,19 +889,25 @@ class TarjetaDigitalAPITester:
         try:
             # First, validate the access token directly
             access_token = os.environ.get('MERCADO_PAGO_ACCESS_TOKEN')
+            if not access_token:
+                return self.log_result("MP Updated Token - Token Missing", False, "❌ MERCADO_PAGO_ACCESS_TOKEN not found in environment")
+            
             print(f"Testing access token: {access_token[:20]}...")
             
             # Test token validity with direct API call
-            token_test_response = requests.get(
-                f"https://api.mercadopago.com/users/me?access_token={access_token}",
-                timeout=10
-            )
-            
-            if token_test_response.status_code == 401:
-                return self.log_result("MP Updated Token - Token Validation", False, 
-                    f"❌ CRITICAL: Access token is INVALID. Status: 401, Response: {token_test_response.text}. "
-                    f"The token 'TEST-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613' "
-                    f"needs to be regenerated in Mercado Pago Developer Panel.")
+            try:
+                token_test_response = requests.get(
+                    f"https://api.mercadopago.com/users/me?access_token={access_token}",
+                    timeout=10
+                )
+                
+                if token_test_response.status_code == 401:
+                    return self.log_result("MP Updated Token - Token Validation", False, 
+                        f"❌ CRITICAL: Access token is INVALID. Status: 401, Response: {token_test_response.text}. "
+                        f"The token 'TEST-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613' "
+                        f"needs to be regenerated in Mercado Pago Developer Panel.")
+            except Exception as token_error:
+                print(f"Token validation error: {token_error}")
             
             # Create a trial user for testing
             timestamp = int(datetime.now().timestamp())
