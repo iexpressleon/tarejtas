@@ -1064,11 +1064,14 @@ def main():
     import sys
     tester = TarjetaDigitalAPITester()
     
-    # Check if priority flag is passed
-    if len(sys.argv) > 1 and sys.argv[1] == "--priority":
-        return tester.run_priority_tests()
-    else:
-        return tester.run_all_tests()
+    # Check command line arguments
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--priority":
+            return tester.run_priority_tests()
+        elif sys.argv[1] == "--new-features":
+            return tester.run_new_features_tests()
+    
+    return tester.run_all_tests()
 
 if __name__ == "__main__":
     sys.exit(main())
