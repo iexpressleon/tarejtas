@@ -1259,6 +1259,8 @@ def main():
             return tester.run_priority_tests()
         elif sys.argv[1] == "--new-features":
             return tester.run_new_features_tests()
+        elif sys.argv[1] == "--mercado-pago":
+            return tester.run_mercado_pago_review_tests()
     
     return tester.run_all_tests()
 
