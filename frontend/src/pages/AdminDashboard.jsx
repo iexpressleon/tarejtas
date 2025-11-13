@@ -135,6 +135,25 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDeleteUser = async (userId, userName) => {
+    if (!window.confirm(`¿Estás seguro de eliminar al usuario ${userName}? Esta acción no se puede deshacer y eliminará toda su información.`)) {
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `${API}/admin/users/${userId}`,
+        { withCredentials: true }
+      );
+      toast.success(`Usuario ${userName} eliminado exitosamente`);
+      loadData();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error(error.response?.data?.detail || "Error al eliminar usuario");
+    }
+    setSelectedUser(null);
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
