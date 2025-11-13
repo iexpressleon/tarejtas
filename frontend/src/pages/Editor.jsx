@@ -28,6 +28,7 @@ export default function Editor() {
   const [email, setEmail] = useState("");
   const [fotoUrl, setFotoUrl] = useState("");
   const [fotoPreview, setFotoPreview] = useState("");
+  const [fotoForma, setFotoForma] = useState("circular");
   const [archivoNegocio, setArchivoNegocio] = useState("");
   const [archivoNegocioTipo, setArchivoNegocioTipo] = useState("");
   const [archivoNegocioNombre, setArchivoNegocioNombre] = useState("");
