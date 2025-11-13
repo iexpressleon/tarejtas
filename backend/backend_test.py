@@ -888,6 +888,10 @@ class TarjetaDigitalAPITester:
         
         try:
             # First, validate the access token directly
+            # Load environment variables
+            from dotenv import load_dotenv
+            load_dotenv('/app/backend/.env')
+            
             access_token = os.environ.get('MERCADO_PAGO_ACCESS_TOKEN')
             if not access_token:
                 return self.log_result("MP Updated Token - Token Missing", False, "❌ MERCADO_PAGO_ACCESS_TOKEN not found in environment")
