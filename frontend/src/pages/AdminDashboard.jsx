@@ -354,6 +354,15 @@ export default function AdminDashboard() {
                           >
                             🔑 Reset
                           </Button>
+                          <Button
+                            data-testid={`delete-user-btn-${user.id}`}
+                            onClick={() => handleDeleteUser(user.id, user.name)}
+                            variant="destructive"
+                            size="sm"
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            🗑️ Borrar
+                          </Button>
                         </div>
                       </td>
                     </tr>
