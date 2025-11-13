@@ -556,11 +556,15 @@ export default function Editor() {
                     <img
                       src={fotoPreview}
                       alt={nombre}
-                      className="w-24 h-24 mx-auto rounded-full object-cover border-4 border-white shadow-lg"
+                      className={`w-24 h-24 mx-auto object-cover border-4 border-white shadow-lg ${
+                        fotoForma === "circular" ? "rounded-full" : "rounded-lg"
+                      }`}
                     />
                   ) : (
                     <div
-                      className="w-24 h-24 mx-auto rounded-full flex items-center justify-center text-white text-3xl font-bold border-4 border-white shadow-lg"
+                      className={`w-24 h-24 mx-auto flex items-center justify-center text-white text-3xl font-bold border-4 border-white shadow-lg ${
+                        fotoForma === "circular" ? "rounded-full" : "rounded-lg"
+                      }`}
                       style={{ backgroundColor: colorTema }}
                     >
                       {nombre.charAt(0).toUpperCase() || "?"}
