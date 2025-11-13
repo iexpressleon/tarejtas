@@ -136,6 +136,7 @@ export default function Editor() {
           whatsapp,
           email,
           foto_url: fotoUrl,
+          foto_forma: fotoForma,
           archivo_negocio: archivoNegocio,
           archivo_negocio_tipo: archivoNegocioTipo,
           archivo_negocio_nombre: archivoNegocioNombre,
