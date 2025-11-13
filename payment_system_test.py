@@ -9,7 +9,17 @@ import json
 
 class PaymentSystemTester:
     def __init__(self, base_url=None):
-        # Use the backend URL from environment
+        # Use REACT_APP_BACKEND_URL from frontend/.env
+        if not base_url:
+            try:
+                with open('/app/frontend/.env', 'r') as f:
+                    for line in f:
+                        if line.startswith('REACT_APP_BACKEND_URL='):
+                            base_url = line.split('=', 1)[1].strip()
+                            break
+            except:
+                pass
+        
         self.base_url = base_url or 'https://tarjetaqr.app'
         self.api = f"{self.base_url}/api"
         
