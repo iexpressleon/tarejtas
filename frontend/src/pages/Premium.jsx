@@ -1,13 +1,65 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import axios from "axios";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 export default function Premium() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [checkoutUrl, setCheckoutUrl] = useState(null);
 
-  const handleUpgrade = () => {
-    toast.success("¡Función en desarrollo! Pronto podrás actualizar a Premium.");
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  const loadUser = async () => {
+    try {
+      const response = await axios.get(`${API}/auth/me`, { withCredentials: true });
+      setCurrentUser(response.data);
+    } catch (error) {
+      console.error("Error loading user:", error);
+      if (error.response?.status === 401) {
+        navigate("/registro");
+      }
+    }
+  };
+
+  const handleUpgrade = async () => {
+    if (!currentUser) {
+      toast.error("Debes iniciar sesión para actualizar");
+      navigate("/registro");
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      const response = await axios.post(
+        `${API}/payments/create-preference`,
+        { user_id: currentUser.id },
+        { withCredentials: true }
+      );
+      
+      const { init_point } = response.data;
+      
+      if (init_point) {
+        // Redirect to Mercado Pago checkout
+        window.location.href = init_point;
+      } else {
+        toast.error("Error al crear la preferencia de pago");
+      }
+    } catch (error) {
+      console.error("Error creating payment:", error);
+      toast.error(error.response?.data?.detail || "Error al procesar el pago");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const features = [
