@@ -887,6 +887,22 @@ class TarjetaDigitalAPITester:
         print("\n📝 Testing Mercado Pago with updated TEST access token...")
         
         try:
+            # First, validate the access token directly
+            access_token = os.environ.get('MERCADO_PAGO_ACCESS_TOKEN')
+            print(f"Testing access token: {access_token[:20]}...")
+            
+            # Test token validity with direct API call
+            token_test_response = requests.get(
+                f"https://api.mercadopago.com/users/me?access_token={access_token}",
+                timeout=10
+            )
+            
+            if token_test_response.status_code == 401:
+                return self.log_result("MP Updated Token - Token Validation", False, 
+                    f"❌ CRITICAL: Access token is INVALID. Status: 401, Response: {token_test_response.text}. "
+                    f"The token 'TEST-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613' "
+                    f"needs to be regenerated in Mercado Pago Developer Panel.")
+            
             # Create a trial user for testing
             timestamp = int(datetime.now().timestamp())
             trial_user_id = f"trial-user-{timestamp}"
@@ -969,7 +985,15 @@ class TarjetaDigitalAPITester:
                 
             elif response.status_code == 500:
                 error_text = response.text
-                if "Mercado Pago not configured" in error_text:
+                if "invalid access token" in error_text:
+                    # Cleanup trial user
+                    self.db.users.delete_one({"id": trial_user_id})
+                    self.db.user_sessions.delete_one({"user_id": trial_user_id})
+                    return self.log_result("MP Updated Token - Invalid Token", False, 
+                        f"❌ CRITICAL: Mercado Pago access token is INVALID. "
+                        f"The token 'TEST-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613' "
+                        f"needs to be regenerated in Mercado Pago Developer Panel at https://www.mercadopago.com/developers/panel")
+                elif "Mercado Pago not configured" in error_text:
                     return self.log_result("MP Updated Token - Configuration", False, "Mercado Pago access token not configured")
                 elif "Empty response from Mercado Pago" in error_text:
                     return self.log_result("MP Updated Token - MP Response", False, "Mercado Pago SDK returned empty response")
