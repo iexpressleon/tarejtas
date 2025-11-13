@@ -140,16 +140,31 @@ backend:
         comment: "✅ QR CODE FUNCTIONALITY VERIFIED: QR generation endpoint working correctly, generates proper QR URLs using api.qrserver.com, QR codes contain correct frontend URL (https://bizcard-digital-1.preview.emergentagent.com/t/{slug}), and public card endpoint (/api/tarjetas/slug/{slug}) accessible without authentication. All QR-related tests passed."
 
   - task: "Mercado Pago Payment Integration"
-    implemented: false
-    working: false
+    implemented: true
+    working: "NA"
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
         comment: "Not yet implemented. SDK is installed (mercadopago==2.3.0). Need to create endpoints for: 1) Generate payment preference ($300/year), 2) Webhook for payment notifications, 3) Update user plan/subscription after successful payment."
+      - working: "NA"
+        agent: "main"
+        comment: "IMPLEMENTED: Added POST /api/payments/create-preference endpoint to create Mercado Pago payment preferences for $300/year subscriptions. Added POST /api/payments/webhook endpoint to handle payment notifications. Webhook updates user plan to 'paid' and extends subscription for 365 days when payment is approved. Access token configured in .env."
+  
+  - task: "Delete User Admin Functionality"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "NEW FEATURE: Added DELETE /api/admin/users/{user_id} endpoint. Admin can delete users and all their data (tarjetas, enlaces, sessions). Prevents admin from deleting themselves. Requires admin authentication."
 
 frontend:
   - task: "Admin Password Reset UI"
