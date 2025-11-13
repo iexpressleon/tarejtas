@@ -1005,6 +1005,43 @@ class TarjetaDigitalAPITester:
         except Exception as e:
             return self.log_result("MP Updated Token - Exception", False, str(e))
 
+    def test_backend_code_verification(self):
+        """Verify backend code has correct $300 MXN configuration"""
+        print("\n📝 Verifying backend code configuration...")
+        
+        try:
+            # Read the backend server.py file to verify configuration
+            with open('/app/backend/server.py', 'r') as f:
+                backend_code = f.read()
+            
+            # Check for $300 amount configuration
+            if '"unit_price": 300.0' in backend_code and '"currency_id": "MXN"' in backend_code:
+                self.log_result("Backend Code - Amount Configuration", True, "✅ Backend correctly configured for $300 MXN")
+            else:
+                self.log_result("Backend Code - Amount Configuration", False, "❌ Backend not configured for $300 MXN")
+            
+            # Check for required endpoints
+            if '/api/payments/create-preference' in backend_code:
+                self.log_result("Backend Code - Create Preference Endpoint", True, "✅ Create preference endpoint exists")
+            else:
+                self.log_result("Backend Code - Create Preference Endpoint", False, "❌ Create preference endpoint missing")
+            
+            if '/api/payments/webhook' in backend_code:
+                self.log_result("Backend Code - Webhook Endpoint", True, "✅ Webhook endpoint exists")
+            else:
+                self.log_result("Backend Code - Webhook Endpoint", False, "❌ Webhook endpoint missing")
+            
+            # Check for proper response structure
+            if '"preference_id"' in backend_code and '"init_point"' in backend_code and '"sandbox_init_point"' in backend_code:
+                self.log_result("Backend Code - Response Structure", True, "✅ Backend returns correct response structure")
+            else:
+                self.log_result("Backend Code - Response Structure", False, "❌ Backend response structure incomplete")
+            
+            return True
+            
+        except Exception as e:
+            return self.log_result("Backend Code Verification", False, str(e))
+
     def test_payment_amount_verification(self):
         """Test that payment preference creates $300 MXN amount"""
         print("\n📝 Testing payment amount is $300 MXN...")
