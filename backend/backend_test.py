@@ -19,8 +19,23 @@ class TarjetaDigitalAPITester:
             except:
                 pass
         
-        self.base_url = base_url or 'https://bizcard-digital-1.preview.emergentagent.com'
-        self.api = f"{self.base_url}/api"
+        self.base_url = base_url or 'https://tarjetaqr.app'
+        # For testing, use local backend if external is not working
+        if base_url and 'tarjetaqr.app' in base_url:
+            # Test if external API is working
+            try:
+                import requests
+                test_response = requests.get(f"{base_url}/api/payments/create-preference", timeout=5)
+                if test_response.status_code == 404:
+                    # External API doesn't have new endpoints, use local
+                    self.api = "http://localhost:8001/api"
+                    print("⚠️ Using local backend API (external API missing new endpoints)")
+                else:
+                    self.api = f"{base_url}/api"
+            except:
+                self.api = f"{base_url}/api"
+        else:
+            self.api = f"{self.base_url}/api"
         self.session_token = None
         self.admin_session_token = None
         self.user_id = None
