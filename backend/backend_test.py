@@ -1030,6 +1030,48 @@ class TarjetaDigitalAPITester:
         except Exception as e:
             return self.log_result("POST /api/auth/logout", False, str(e))
 
+    def run_mercado_pago_review_tests(self):
+        """Run specific tests for Mercado Pago integration review with updated TEST access token"""
+        print("=" * 70)
+        print("🚀 Starting Mercado Pago Integration Review Tests")
+        print("   Testing with updated TEST access token")
+        print("=" * 70)
+        
+        # Setup
+        if not self.setup_test_users():
+            print("\n❌ Failed to setup test users. Aborting tests.")
+            return 1
+        
+        # Priority 1: Payment Preference Creation
+        print("\n" + "=" * 50)
+        print("💳 PRIORITY 1: PAYMENT PREFERENCE CREATION")
+        print("=" * 50)
+        self.test_payment_preference_auth_required()
+        self.test_payment_preference_user_validation()
+        self.test_mercado_pago_updated_token()
+        
+        # Priority 2: Response Structure & Amount Verification
+        print("\n" + "=" * 50)
+        print("📋 PRIORITY 2: RESPONSE STRUCTURE & AMOUNT")
+        print("=" * 50)
+        self.test_payment_amount_verification()
+        self.test_webhook_endpoint_exists()
+        
+        # Cleanup
+        self.cleanup_test_data()
+        
+        # Summary
+        print("\n" + "=" * 70)
+        print(f"📊 Mercado Pago Review Test Summary: {self.tests_passed}/{self.tests_run} tests passed")
+        print("=" * 70)
+        
+        if self.tests_passed == self.tests_run:
+            print("✅ All Mercado Pago review tests passed!")
+            return 0
+        else:
+            print(f"❌ {self.tests_run - self.tests_passed} Mercado Pago review test(s) failed")
+            return 1
+
     def run_new_features_tests(self):
         """Run tests for new features: Domain/CORS, Mercado Pago, Admin Delete, Webhook"""
         print("=" * 60)
