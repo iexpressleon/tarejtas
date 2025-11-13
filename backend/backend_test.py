@@ -624,6 +624,244 @@ class TarjetaDigitalAPITester:
         except Exception as e:
             return self.log_result("QR Code URL Verification", False, str(e))
 
+    def test_cors_configuration(self):
+        """Test CORS headers allow requests from tarjetaqr.app"""
+        print("\n📝 Testing CORS configuration...")
+        
+        try:
+            # Test preflight request
+            headers = {
+                'Origin': 'https://tarjetaqr.app',
+                'Access-Control-Request-Method': 'POST',
+                'Access-Control-Request-Headers': 'Content-Type,Authorization'
+            }
+            
+            response = requests.options(f"{self.api}/auth/me", headers=headers)
+            
+            if response.status_code in [200, 204]:
+                cors_origin = response.headers.get('Access-Control-Allow-Origin')
+                cors_credentials = response.headers.get('Access-Control-Allow-Credentials')
+                
+                if cors_origin and ('*' in cors_origin or 'tarjetaqr.app' in cors_origin):
+                    if cors_credentials and cors_credentials.lower() == 'true':
+                        return self.log_result("CORS Configuration", True, f"CORS properly configured: Origin={cors_origin}, Credentials={cors_credentials}")
+                    else:
+                        return self.log_result("CORS Configuration", False, f"CORS credentials not enabled: {cors_credentials}")
+                else:
+                    return self.log_result("CORS Configuration", False, f"CORS origin not configured: {cors_origin}")
+            else:
+                return self.log_result("CORS Configuration", False, f"Preflight request failed: {response.status_code}")
+        except Exception as e:
+            return self.log_result("CORS Configuration", False, str(e))
+
+    def test_payment_preference_creation(self):
+        """Test POST /api/payments/create-preference endpoint"""
+        print("\n📝 Testing Mercado Pago payment preference creation...")
+        
+        try:
+            payload = {"user_id": self.regular_user_id}
+            
+            response = requests.post(
+                f"{self.api}/payments/create-preference",
+                json=payload,
+                headers={"Authorization": f"Bearer {self.session_token}"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("preference_id") and data.get("init_point"):
+                    return self.log_result("Payment Preference Creation", True, f"Preference created: {data['preference_id']}")
+                else:
+                    return self.log_result("Payment Preference Creation", False, "Missing preference_id or init_point")
+            elif response.status_code == 500:
+                # Check if it's a configuration issue
+                error_text = response.text
+                if "Mercado Pago not configured" in error_text:
+                    return self.log_result("Payment Preference Creation", True, "Endpoint exists but MP not configured (expected in test)")
+                else:
+                    return self.log_result("Payment Preference Creation", False, f"Server error: {error_text}")
+            else:
+                return self.log_result("Payment Preference Creation", False, f"Status {response.status_code}: {response.text}")
+        except Exception as e:
+            return self.log_result("Payment Preference Creation", False, str(e))
+
+    def test_payment_preference_auth_required(self):
+        """Test that payment preference creation requires authentication"""
+        print("\n📝 Testing payment preference requires auth...")
+        
+        try:
+            payload = {"user_id": self.regular_user_id}
+            
+            # Test without authentication
+            response = requests.post(
+                f"{self.api}/payments/create-preference",
+                json=payload
+            )
+            
+            if response.status_code == 401:
+                return self.log_result("Payment Preference Auth Required", True, "Correctly requires authentication")
+            else:
+                return self.log_result("Payment Preference Auth Required", False, f"No auth got status {response.status_code}")
+        except Exception as e:
+            return self.log_result("Payment Preference Auth Required", False, str(e))
+
+    def test_payment_preference_user_validation(self):
+        """Test payment preference with non-existent user"""
+        print("\n📝 Testing payment preference user validation...")
+        
+        try:
+            payload = {"user_id": "non-existent-user-id"}
+            
+            response = requests.post(
+                f"{self.api}/payments/create-preference",
+                json=payload,
+                headers={"Authorization": f"Bearer {self.session_token}"}
+            )
+            
+            if response.status_code == 404:
+                return self.log_result("Payment Preference User Validation", True, "Correctly validates user existence")
+            else:
+                return self.log_result("Payment Preference User Validation", False, f"Non-existent user got status {response.status_code}")
+        except Exception as e:
+            return self.log_result("Payment Preference User Validation", False, str(e))
+
+    def test_admin_delete_user_auth_required(self):
+        """Test DELETE /api/admin/users/{user_id} requires admin auth"""
+        print("\n📝 Testing admin delete user requires admin auth...")
+        
+        try:
+            # Test with no auth
+            response = requests.delete(f"{self.api}/admin/users/{self.regular_user_id}")
+            
+            if response.status_code == 401:
+                # Test with regular user auth (should fail)
+                response = requests.delete(
+                    f"{self.api}/admin/users/{self.regular_user_id}",
+                    headers={"Authorization": f"Bearer {self.session_token}"}
+                )
+                
+                if response.status_code == 403:
+                    return self.log_result("Admin Delete User Auth Required", True, "Correctly requires admin role")
+                else:
+                    return self.log_result("Admin Delete User Auth Required", False, f"Regular user got status {response.status_code}")
+            else:
+                return self.log_result("Admin Delete User Auth Required", False, f"No auth got status {response.status_code}")
+        except Exception as e:
+            return self.log_result("Admin Delete User Auth Required", False, str(e))
+
+    def test_admin_delete_user_self_prevention(self):
+        """Test prevention of admin deleting themselves"""
+        print("\n📝 Testing admin cannot delete themselves...")
+        
+        try:
+            response = requests.delete(
+                f"{self.api}/admin/users/{self.admin_user_id}",
+                headers={"Authorization": f"Bearer {self.admin_session_token}"}
+            )
+            
+            if response.status_code == 400:
+                return self.log_result("Admin Delete Self Prevention", True, "Correctly prevents admin self-deletion")
+            else:
+                return self.log_result("Admin Delete Self Prevention", False, f"Self-deletion got status {response.status_code}")
+        except Exception as e:
+            return self.log_result("Admin Delete Self Prevention", False, str(e))
+
+    def test_admin_delete_user_success(self):
+        """Test successful user deletion and data cleanup"""
+        print("\n📝 Testing successful admin user deletion...")
+        
+        try:
+            # Create a test user to delete
+            timestamp = int(datetime.now().timestamp())
+            delete_user_id = f"test-delete-user-{timestamp}"
+            
+            # Create user in database
+            user_doc = {
+                "id": delete_user_id,
+                "email": f"delete.{timestamp}@example.com",
+                "name": "Delete Test User",
+                "password_hash": bcrypt.hashpw("delete123".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+                "plan": "trial",
+                "role": "user",
+                "license_key": str(uuid.uuid4()),
+                "is_active": True,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            self.db.users.insert_one(user_doc)
+            
+            # Create a tarjeta for this user
+            tarjeta_doc = {
+                "id": str(uuid.uuid4()),
+                "usuario_id": delete_user_id,
+                "slug": f"delete-test-{timestamp}",
+                "nombre": "Delete Test Card",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            self.db.tarjetas.insert_one(tarjeta_doc)
+            
+            # Create a session for this user
+            session_doc = {
+                "user_id": delete_user_id,
+                "session_token": f"delete_session_{timestamp}",
+                "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            self.db.user_sessions.insert_one(session_doc)
+            
+            # Delete the user via API
+            response = requests.delete(
+                f"{self.api}/admin/users/{delete_user_id}",
+                headers={"Authorization": f"Bearer {self.admin_session_token}"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    # Verify user and associated data are deleted
+                    user_exists = self.db.users.find_one({"id": delete_user_id})
+                    tarjetas_exist = self.db.tarjetas.find_one({"usuario_id": delete_user_id})
+                    sessions_exist = self.db.user_sessions.find_one({"user_id": delete_user_id})
+                    
+                    if not user_exists and not tarjetas_exist and not sessions_exist:
+                        return self.log_result("Admin Delete User Success", True, "User and all associated data deleted")
+                    else:
+                        return self.log_result("Admin Delete User Success", False, "Some data not deleted properly")
+                else:
+                    return self.log_result("Admin Delete User Success", False, "Delete not confirmed")
+            else:
+                return self.log_result("Admin Delete User Success", False, f"Status {response.status_code}: {response.text}")
+        except Exception as e:
+            return self.log_result("Admin Delete User Success", False, str(e))
+
+    def test_webhook_endpoint_exists(self):
+        """Test POST /api/payments/webhook endpoint exists and responds"""
+        print("\n📝 Testing webhook endpoint accessibility...")
+        
+        try:
+            # Test webhook endpoint with sample data
+            payload = {
+                "topic": "payment",
+                "resource": "12345",
+                "type": "payment"
+            }
+            
+            response = requests.post(
+                f"{self.api}/payments/webhook",
+                json=payload
+            )
+            
+            # Webhook should respond even with invalid data (just checking it exists)
+            if response.status_code in [200, 400, 500]:
+                data = response.json()
+                if "status" in data:
+                    return self.log_result("Webhook Endpoint Exists", True, f"Webhook responds with status: {data.get('status')}")
+                else:
+                    return self.log_result("Webhook Endpoint Exists", True, "Webhook endpoint accessible")
+            else:
+                return self.log_result("Webhook Endpoint Exists", False, f"Unexpected status {response.status_code}")
+        except Exception as e:
+            return self.log_result("Webhook Endpoint Exists", False, str(e))
+
     def test_logout(self):
         """Test POST /api/auth/logout"""
         print("\n📝 Testing logout...")
