@@ -617,21 +617,46 @@ async def mercado_pago_webhook(request: Request):
             logger.info(f"Payment status: {status}, User: {external_reference}")
             
             if status == "approved" and external_reference:
-                # Update user to paid plan
-                subscription_end = datetime.now(timezone.utc) + timedelta(days=365)
+                # Get current user to check existing subscription
+                user = await db.users.find_one({"id": external_reference})
                 
-                await db.users.update_one(
-                    {"id": external_reference},
-                    {
-                        "$set": {
-                            "plan": "paid",
-                            "subscription_ends_at": subscription_end.isoformat(),
-                            "payment_notified": True
+                if user:
+                    # Calculate new subscription end date
+                    # If user has active subscription, extend from that date
+                    # Otherwise, extend from now
+                    current_end = user.get("subscription_ends_at")
+                    
+                    if current_end and user.get("plan") == "paid":
+                        # Parse existing end date and extend from there
+                        try:
+                            if isinstance(current_end, str):
+                                current_end_dt = datetime.fromisoformat(current_end)
+                            else:
+                                current_end_dt = current_end
+                            
+                            # Only extend if subscription hasn't expired yet
+                            if current_end_dt > datetime.now(timezone.utc):
+                                subscription_end = current_end_dt + timedelta(days=365)
+                            else:
+                                subscription_end = datetime.now(timezone.utc) + timedelta(days=365)
+                        except:
+                            subscription_end = datetime.now(timezone.utc) + timedelta(days=365)
+                    else:
+                        # New subscription or trial user
+                        subscription_end = datetime.now(timezone.utc) + timedelta(days=365)
+                    
+                    await db.users.update_one(
+                        {"id": external_reference},
+                        {
+                            "$set": {
+                                "plan": "paid",
+                                "subscription_ends_at": subscription_end.isoformat(),
+                                "payment_notified": True
+                            }
                         }
-                    }
-                )
-                
-                logger.info(f"User {external_reference} upgraded to paid plan")
+                    )
+                    
+                    logger.info(f"User {external_reference} subscription updated until {subscription_end.isoformat()}")
         
         return {"status": "ok"}
         
