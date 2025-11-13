@@ -55,6 +55,7 @@ export default function Editor() {
       setEmail(t.email || "");
       setFotoUrl(t.foto_url || "");
       setFotoPreview(t.foto_url || "");
+      setFotoForma(t.foto_forma || "circular");
       setArchivoNegocio(t.archivo_negocio || "");
       setArchivoNegocioTipo(t.archivo_negocio_tipo || "");
       setArchivoNegocioNombre(t.archivo_negocio_nombre || "");
