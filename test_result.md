@@ -192,16 +192,43 @@ frontend:
         comment: "Public card route exists at /t/:slug. Component fetches card data using slug from URL params. Need to verify QR codes correctly link to this route."
 
   - task: "Payment Flow UI"
-    implemented: false
-    working: false
+    implemented: true
+    working: "NA"
     file: "frontend/src/pages/Premium.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
         comment: "Premium page exists but payment button shows placeholder toast. Need to integrate Mercado Pago payment button that creates preference and redirects to payment page. Update pricing from $9.99/month to $300/year."
+      - working: "NA"
+        agent: "main"
+        comment: "IMPLEMENTED: Updated Premium.jsx to show $300/año pricing. Button now calls /api/payments/create-preference and redirects to Mercado Pago checkout. Created PaymentSuccess.jsx, PaymentFailure.jsx, and PaymentPending.jsx pages for post-payment redirects. Added routes in App.js."
+  
+  - task: "Delete User Button Admin UI"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/AdminDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "NEW FEATURE: Added 'Borrar' button with trash icon in admin user list. Shows confirmation dialog before deletion. Calls DELETE /api/admin/users/{user_id} endpoint and reloads user list on success."
+  
+  - task: "Domain Configuration Update"
+    implemented: true
+    working: "NA"
+    file: "frontend/.env, backend/.env"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "UPDATED: Changed REACT_APP_BACKEND_URL to https://tarjetaqr.app, updated FRONTEND_URL to https://tarjetaqr.app, added new domain to CORS_ORIGINS (kept old domain for backward compatibility)."
 
 metadata:
   created_by: "main_agent"
