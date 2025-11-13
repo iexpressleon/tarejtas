@@ -141,9 +141,9 @@ backend:
 
   - task: "Mercado Pago Payment Integration"
     implemented: true
-    working: true
+    working: false
     file: "backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -159,6 +159,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ PAYMENT SYSTEM ENHANCEMENTS VERIFIED: Comprehensive testing of updated payment system completed successfully. PRIORITY 1: Trial users can now create payment preferences (no longer blocked). PRIORITY 2: Paid users can renew/extend subscriptions (no 'already has paid subscription' error). PRIORITY 3: Webhook extension logic working correctly - extends from current expiration date for active subscriptions, extends from now for expired subscriptions. All 6 payment enhancement tests passed including $300 amount verification and webhook accessibility."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL ISSUE FOUND: Mercado Pago TEST access token 'TEST-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613' is INVALID. Direct API validation returns 401 'invalid access token' error. BACKEND CODE VERIFICATION: ✅ All endpoints correctly implemented, ✅ $300 MXN amount properly configured, ✅ Response structure correct (preference_id, init_point, sandbox_init_point), ✅ Authentication and validation working. SOLUTION REQUIRED: Token must be regenerated in Mercado Pago Developer Panel at https://www.mercadopago.com/developers/panel. Test results: 8/9 tests passed (only token validation failed)."
   
   - task: "Delete User Admin Functionality"
     implemented: true
