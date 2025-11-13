@@ -7,6 +7,9 @@ import Editor from "@/pages/Editor.jsx";
 import TarjetaPublica from "@/pages/TarjetaPublica.jsx";
 import Premium from "@/pages/Premium.jsx";
 import AdminDashboard from "@/pages/AdminDashboard.jsx";
+import PaymentSuccess from "@/pages/PaymentSuccess.jsx";
+import PaymentFailure from "@/pages/PaymentFailure.jsx";
+import PaymentPending from "@/pages/PaymentPending.jsx";
 import { Toaster } from "@/components/ui/sonner";
 
 function App() {
@@ -22,6 +25,9 @@ function App() {
           <Route path="/t/:slug" element={<TarjetaPublica />} />
           <Route path="/premium" element={<Premium />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/failure" element={<PaymentFailure />} />
+          <Route path="/payment/pending" element={<PaymentPending />} />
         </Routes>
       </BrowserRouter>
     </div>
