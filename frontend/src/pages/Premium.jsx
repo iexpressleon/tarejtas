@@ -195,40 +195,6 @@ export default function Premium() {
               ))}
             </div>
           </div>
-
-          {/* FAQ */}
-          <div className="pt-12 space-y-6">
-            <h2 className="text-3xl font-bold text-gray-900">Preguntas frecuentes</h2>
-            <div className="space-y-4 max-w-2xl mx-auto text-left">
-              <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl">
-                <h3 className="font-bold text-lg mb-2">
-                  ¿Puedo cancelar en cualquier momento?
-                </h3>
-                <p className="text-gray-600">
-                  Sí, puedes cancelar tu suscripción en cualquier momento desde tu
-                  panel de control. No hay compromisos a largo plazo.
-                </p>
-              </Card>
-              <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl">
-                <h3 className="font-bold text-lg mb-2">
-                  ¿Qué métodos de pago aceptan?
-                </h3>
-                <p className="text-gray-600">
-                  Aceptamos todas las tarjetas de crédito y débito principales, así
-                  como PayPal y Mercado Pago.
-                </p>
-              </Card>
-              <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl">
-                <h3 className="font-bold text-lg mb-2">
-                  ¿Qué pasa con mi tarjeta si cancelo?
-                </h3>
-                <p className="text-gray-600">
-                  Tu tarjeta seguirá funcionando, pero volverá al plan gratuito con
-                  las limitaciones correspondientes.
-                </p>
-              </Card>
-            </div>
-          </div>
         </div>
       </main>
     </div>
