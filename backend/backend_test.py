@@ -1117,6 +1117,7 @@ class TarjetaDigitalAPITester:
         print("\n" + "=" * 50)
         print("📋 PRIORITY 2: RESPONSE STRUCTURE & AMOUNT")
         print("=" * 50)
+        self.test_backend_code_verification()
         self.test_payment_amount_verification()
         self.test_webhook_endpoint_exists()
         
