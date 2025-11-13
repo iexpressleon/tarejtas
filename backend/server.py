@@ -105,6 +105,7 @@ class TarjetaCreate(BaseModel):
     whatsapp: Optional[str] = ""
     email: Optional[str] = ""
     foto_url: Optional[str] = ""
+    foto_forma: Optional[str] = "circular"
     archivo_negocio: Optional[str] = ""
     archivo_negocio_tipo: Optional[str] = ""
     archivo_negocio_nombre: Optional[str] = ""
