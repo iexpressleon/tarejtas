@@ -238,8 +238,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Admin Password Reset UI"
-    - "Public Card View (QR Target)"
+    - "Mercado Pago Payment Integration"
+    - "Payment Flow UI"
+    - "Delete User Admin Functionality"
+    - "Delete User Button Admin UI"
+    - "Domain Configuration Update"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
