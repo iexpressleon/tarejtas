@@ -137,20 +137,21 @@ export default function Premium() {
             <div className="space-y-6">
               <div>
                 <div className="text-5xl font-bold text-gray-900">
-                  $9.99
-                  <span className="text-xl text-gray-600 font-normal">/mes</span>
+                  $300
+                  <span className="text-xl text-gray-600 font-normal">/año</span>
                 </div>
-                <p className="text-gray-600 mt-2">o $99/año (ahorra 17%)</p>
+                <p className="text-gray-600 mt-2">Pago único anual</p>
               </div>
               <Button
                 data-testid="upgrade-btn"
                 onClick={handleUpgrade}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-6 text-lg rounded-xl hover:scale-105 transition-all shadow-lg"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-6 text-lg rounded-xl hover:scale-105 transition-all shadow-lg disabled:opacity-50"
               >
-                Actualizar ahora
+                {loading ? "Procesando..." : "Pagar con Mercado Pago"}
               </Button>
               <p className="text-sm text-gray-500">
-                Cancela en cualquier momento, sin preguntas
+                Pago seguro procesado por Mercado Pago
               </p>
             </div>
           </Card>
