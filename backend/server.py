@@ -577,7 +577,18 @@ async def create_payment_preference(payment_data: PaymentPreferenceRequest, requ
         
         # Create preference
         preference_response = sdk.preference().create(preference_data)
-        preference = preference_response["response"]
+        
+        logger.info(f"Mercado Pago response: {preference_response}")
+        
+        if preference_response.get("status") != 201:
+            error_message = preference_response.get("response", {}).get("message", "Unknown error")
+            logger.error(f"MP Error: {error_message}")
+            raise HTTPException(status_code=500, detail=f"Mercado Pago error: {error_message}")
+        
+        preference = preference_response.get("response")
+        
+        if not preference:
+            raise HTTPException(status_code=500, detail="Empty response from Mercado Pago")
         
         logger.info(f"Payment preference created for user {user_doc['id']}: {preference.get('id')}")
         
@@ -587,6 +598,8 @@ async def create_payment_preference(payment_data: PaymentPreferenceRequest, requ
             "sandbox_init_point": preference.get("sandbox_init_point")
         }
         
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error creating payment preference: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error creating payment: {str(e)}")
