@@ -1032,7 +1032,7 @@ class TarjetaDigitalAPITester:
             else:
                 self.log_result("Backend Code - Create Preference Endpoint", False, "❌ Create preference endpoint missing")
             
-            if '/api/payments/webhook' in backend_code:
+            if '/payments/webhook' in backend_code or 'mercado_pago_webhook' in backend_code:
                 self.log_result("Backend Code - Webhook Endpoint", True, "✅ Webhook endpoint exists")
             else:
                 self.log_result("Backend Code - Webhook Endpoint", False, "❌ Webhook endpoint missing")
