@@ -273,11 +273,40 @@ export default function Editor() {
                     onChange={handleImageUpload}
                     className="mt-2"
                   />
+                  <div className="mt-3 flex gap-4 items-center">
+                    <Label className="text-sm font-medium">Forma:</Label>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setFotoForma("circular")}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                          fotoForma === "circular"
+                            ? "bg-indigo-600 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        ⭕ Circular
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFotoForma("rectangular")}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                          fotoForma === "rectangular"
+                            ? "bg-indigo-600 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        ⬜ Rectangular
+                      </button>
+                    </div>
+                  </div>
                   {fotoPreview && (
                     <img
                       src={fotoPreview}
                       alt="Preview"
-                      className="mt-4 w-24 h-24 rounded-full object-cover"
+                      className={`mt-4 w-24 h-24 object-cover ${
+                        fotoForma === "circular" ? "rounded-full" : "rounded-lg"
+                      }`}
                     />
                   )}
                 </div>
