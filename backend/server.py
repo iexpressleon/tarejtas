@@ -280,6 +280,7 @@ async def register(user_input: UserRegister, response: Response):
         "whatsapp": "",
         "email": user_input.email,
         "foto_url": "",
+        "foto_forma": "circular",
         "qr_url": "",
         "archivo_negocio": "",
         "archivo_negocio_tipo": "",
