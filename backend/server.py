@@ -88,6 +88,7 @@ class Tarjeta(BaseModel):
     whatsapp: Optional[str] = ""
     email: Optional[str] = ""
     foto_url: Optional[str] = ""
+    foto_forma: Optional[str] = "circular"  # 'circular' or 'rectangular'
     qr_url: Optional[str] = ""
     archivo_negocio: Optional[str] = ""  # PDF or JPG in base64
     archivo_negocio_tipo: Optional[str] = ""  # 'pdf' or 'jpg'
