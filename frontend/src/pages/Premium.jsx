@@ -121,14 +121,27 @@ export default function Premium() {
               </div>
             </div>
             <h1 className="text-5xl font-bold text-gray-900">
-              Lleva tu tarjeta al
-              <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                siguiente nivel
-              </span>
+              {currentUser?.plan === "paid" ? (
+                <>
+                  Renovar tu
+                  <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    suscripción premium
+                  </span>
+                </>
+              ) : (
+                <>
+                  Lleva tu tarjeta al
+                  <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    siguiente nivel
+                  </span>
+                </>
+              )}
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Desbloquea funciones exclusivas y destaca aún más con tu tarjeta
-              digital profesional
+              {currentUser?.plan === "paid" 
+                ? "Extiende tu suscripción por un año adicional y sigue disfrutando de todas las funciones premium"
+                : "Desbloquea funciones exclusivas y destaca aún más con tu tarjeta digital profesional"
+              }
             </p>
           </div>
 
