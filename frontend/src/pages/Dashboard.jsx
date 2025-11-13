@@ -98,16 +98,14 @@ export default function Dashboard() {
             <span className="text-xl font-bold text-gray-900">TarjetaDigital</span>
           </div>
           <div className="flex items-center gap-4">
-            {user?.plan === "free" && (
-              <Button
-                data-testid="upgrade-premium-btn"
-                variant="outline"
-                onClick={() => navigate("/premium")}
-                className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0 hover:from-yellow-500 hover:to-orange-500 hover:scale-105 transition-all"
-              >
-                ⭐ Actualizar a Premium
-              </Button>
-            )}
+            <Button
+              data-testid="upgrade-premium-btn"
+              variant="outline"
+              onClick={() => navigate("/premium")}
+              className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0 hover:from-yellow-500 hover:to-orange-500 hover:scale-105 transition-all"
+            >
+              {user?.plan === "paid" ? "💳 Renovar Suscripción" : "⭐ Actualizar a Premium"}
+            </Button>
             <Button
               data-testid="logout-btn"
               variant="outline"
