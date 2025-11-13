@@ -156,6 +156,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ MERCADO PAGO INTEGRATION VERIFIED: All payment endpoints working correctly - POST /api/payments/create-preference requires authentication, validates user existence, returns proper response structure with $300 amount. POST /api/payments/webhook endpoint accessible and handles payment notifications. Authentication and error handling working as expected. MP SDK configured but returns null in test environment (expected)."
+      - working: true
+        agent: "testing"
+        comment: "✅ PAYMENT SYSTEM ENHANCEMENTS VERIFIED: Comprehensive testing of updated payment system completed successfully. PRIORITY 1: Trial users can now create payment preferences (no longer blocked). PRIORITY 2: Paid users can renew/extend subscriptions (no 'already has paid subscription' error). PRIORITY 3: Webhook extension logic working correctly - extends from current expiration date for active subscriptions, extends from now for expired subscriptions. All 6 payment enhancement tests passed including $300 amount verification and webhook accessibility."
   
   - task: "Delete User Admin Functionality"
     implemented: true
