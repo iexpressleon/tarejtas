@@ -183,13 +183,17 @@ export default function TarjetaPublica() {
                   src={tarjeta.foto_url}
                   alt={tarjeta.nombre}
                   data-testid="profile-image"
-                  className="w-28 h-28 mx-auto rounded-full object-cover border-4 border-white shadow-xl"
+                  className={`w-28 h-28 mx-auto object-cover border-4 border-white shadow-xl ${
+                    tarjeta?.foto_forma === "rectangular" ? "rounded-lg" : "rounded-full"
+                  }`}
                   style={{ borderColor: colorTema }}
                 />
               ) : (
                 <div
                   data-testid="profile-avatar"
-                  className="w-28 h-28 mx-auto rounded-full flex items-center justify-center text-white text-4xl font-bold border-4 border-white shadow-xl"
+                  className={`w-28 h-28 mx-auto flex items-center justify-center text-white text-4xl font-bold border-4 border-white shadow-xl ${
+                    tarjeta?.foto_forma === "rectangular" ? "rounded-lg" : "rounded-full"
+                  }`}
                   style={{ backgroundColor: colorTema }}
                 >
                   {tarjeta?.nombre?.charAt(0).toUpperCase() || "?"}
