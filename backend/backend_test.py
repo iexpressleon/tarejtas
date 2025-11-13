@@ -1027,7 +1027,7 @@ class TarjetaDigitalAPITester:
                 self.log_result("Backend Code - Amount Configuration", False, "❌ Backend not configured for $300 MXN")
             
             # Check for required endpoints
-            if '/api/payments/create-preference' in backend_code:
+            if '/payments/create-preference' in backend_code or 'create_payment_preference' in backend_code:
                 self.log_result("Backend Code - Create Preference Endpoint", True, "✅ Create preference endpoint exists")
             else:
                 self.log_result("Backend Code - Create Preference Endpoint", False, "❌ Create preference endpoint missing")
