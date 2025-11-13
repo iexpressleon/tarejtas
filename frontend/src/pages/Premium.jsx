@@ -159,12 +159,20 @@ export default function Premium() {
                 data-testid="upgrade-btn"
                 onClick={handleUpgrade}
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-6 text-lg rounded-xl hover:scale-105 transition-all shadow-lg disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-6 text-lg rounded-xl hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? "Procesando..." : "Pagar con Mercado Pago"}
+                {loading 
+                  ? "Procesando..." 
+                  : currentUser?.plan === "paid" 
+                    ? "💳 Renovar por 1 año más" 
+                    : "💳 Pagar con Mercado Pago"
+                }
               </Button>
               <p className="text-sm text-gray-500">
-                Pago seguro procesado por Mercado Pago
+                {currentUser?.plan === "paid" 
+                  ? "Tu suscripción se extenderá automáticamente por 1 año adicional"
+                  : "Pago seguro procesado por Mercado Pago"
+                }
               </p>
             </div>
           </Card>
