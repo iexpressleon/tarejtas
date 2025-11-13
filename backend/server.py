@@ -495,6 +495,152 @@ async def reset_user_password(user_id: str, password_data: PasswordReset, reques
     
     return {"success": True, "message": "Password reset successfully"}
 
+@api_router.delete("/admin/users/{user_id}")
+async def delete_user(user_id: str, request: Request):
+    """Delete user and all associated data (admin only)"""
+    await require_admin(request)
+    
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Prevent admin from deleting themselves
+    current_user = await require_auth(request)
+    if current_user.id == user_id:
+        raise HTTPException(status_code=400, detail="Cannot delete your own account")
+    
+    # Delete user's tarjetas and enlaces
+    tarjetas = await db.tarjetas.find({"usuario_id": user_id}).to_list(length=None)
+    for tarjeta in tarjetas:
+        await db.enlaces.delete_many({"tarjeta_id": tarjeta["id"]})
+    
+    await db.tarjetas.delete_many({"usuario_id": user_id})
+    await db.user_sessions.delete_many({"user_id": user_id})
+    await db.users.delete_one({"id": user_id})
+    
+    return {"success": True, "message": "User deleted successfully"}
+
+# ============ MERCADO PAGO ENDPOINTS ============
+
+class PaymentPreferenceRequest(BaseModel):
+    user_id: str
+
+@api_router.post("/payments/create-preference")
+async def create_payment_preference(payment_data: PaymentPreferenceRequest, request: Request):
+    """Create Mercado Pago payment preference for annual subscription"""
+    user = await require_auth(request)
+    
+    # Verify user exists
+    user_doc = await db.users.find_one({"id": payment_data.user_id})
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Check if user already has paid plan
+    if user_doc.get("plan") == "paid":
+        raise HTTPException(status_code=400, detail="User already has a paid subscription")
+    
+    try:
+        import mercadopago
+        
+        # Initialize Mercado Pago SDK
+        mp_access_token = os.environ.get('MERCADO_PAGO_ACCESS_TOKEN')
+        if not mp_access_token:
+            raise HTTPException(status_code=500, detail="Mercado Pago not configured")
+        
+        sdk = mercadopago.SDK(mp_access_token)
+        
+        # Get frontend URL for redirects
+        frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+        
+        # Create preference data
+        preference_data = {
+            "items": [
+                {
+                    "title": "Suscripción Anual - TarjetaQR",
+                    "quantity": 1,
+                    "unit_price": 300.0,
+                    "currency_id": "MXN"
+                }
+            ],
+            "payer": {
+                "name": user_doc.get("name"),
+                "email": user_doc.get("email")
+            },
+            "back_urls": {
+                "success": f"{frontend_url}/payment/success",
+                "failure": f"{frontend_url}/payment/failure",
+                "pending": f"{frontend_url}/payment/pending"
+            },
+            "auto_return": "approved",
+            "external_reference": user_doc["id"],
+            "statement_descriptor": "TARJETAQR SUSCRIPCION",
+            "notification_url": f"{frontend_url}/api/payments/webhook"
+        }
+        
+        # Create preference
+        preference_response = sdk.preference().create(preference_data)
+        preference = preference_response["response"]
+        
+        logger.info(f"Payment preference created for user {user_doc['id']}: {preference.get('id')}")
+        
+        return {
+            "preference_id": preference.get("id"),
+            "init_point": preference.get("init_point"),
+            "sandbox_init_point": preference.get("sandbox_init_point")
+        }
+        
+    except Exception as e:
+        logger.error(f"Error creating payment preference: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error creating payment: {str(e)}")
+
+@api_router.post("/payments/webhook")
+async def mercado_pago_webhook(request: Request):
+    """Handle Mercado Pago payment notifications"""
+    try:
+        body = await request.json()
+        logger.info(f"Received Mercado Pago webhook: {body}")
+        
+        topic = body.get("topic") or body.get("type")
+        resource_id = body.get("resource")
+        
+        if topic == "payment":
+            import mercadopago
+            
+            mp_access_token = os.environ.get('MERCADO_PAGO_ACCESS_TOKEN')
+            sdk = mercadopago.SDK(mp_access_token)
+            
+            # Get payment details
+            payment_info = sdk.payment().get(resource_id)
+            payment = payment_info["response"]
+            
+            status = payment.get("status")
+            external_reference = payment.get("external_reference")
+            
+            logger.info(f"Payment status: {status}, User: {external_reference}")
+            
+            if status == "approved" and external_reference:
+                # Update user to paid plan
+                subscription_end = datetime.now(timezone.utc) + timedelta(days=365)
+                
+                await db.users.update_one(
+                    {"id": external_reference},
+                    {
+                        "$set": {
+                            "plan": "paid",
+                            "subscription_ends_at": subscription_end.isoformat(),
+                            "payment_notified": True
+                        }
+                    }
+                )
+                
+                logger.info(f"User {external_reference} upgraded to paid plan")
+        
+        return {"status": "ok"}
+        
+    except Exception as e:
+        logger.error(f"Webhook error: {str(e)}")
+        return {"status": "error", "message": str(e)}
+
 # ============ TARJETAS ENDPOINTS ============
 
 @api_router.get("/tarjetas", response_model=List[Tarjeta])
