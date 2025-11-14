@@ -64,7 +64,7 @@ export default function Premium() {
 
   const features = [
     {
-      title: "Sin marca TarjetaDigital",
+      title: "Sin marca TarjetaQR.app",
       description: "Remueve el footer con nuestra marca",
       icon: "✨",
     },
