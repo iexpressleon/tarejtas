@@ -74,9 +74,6 @@ export default function TarjetaPublica() {
     if (tarjeta?.email) {
       const mailtoUrl = `mailto:${tarjeta.email}`;
       window.location.href = mailtoUrl;
-      setModalContent(mailtoUrl);
-      setModalTitle(tarjeta.email);
-      setModalOpen(true);
     }
   };
 
@@ -88,11 +85,8 @@ export default function TarjetaPublica() {
         finalUrl = "https://" + finalUrl;
       }
       
-      // All links open in modal with close button
-      setModalType("website");
-      setModalContent(finalUrl);
-      setModalTitle("Enlace");
-      setModalOpen(true);
+      // Open directly in new tab
+      window.open(finalUrl, "_blank", "noopener,noreferrer");
     }
   };
   
