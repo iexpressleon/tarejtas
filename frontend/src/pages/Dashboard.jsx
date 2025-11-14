@@ -53,10 +53,15 @@ export default function Dashboard() {
   const handleLogout = async () => {
     try {
       await axios.post(`${API}/auth/logout`, {}, { withCredentials: true });
+      // Clear localStorage token
+      localStorage.removeItem('session_token');
       toast.success("Sesión cerrada");
       navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
+      // Clear token anyway
+      localStorage.removeItem('session_token');
+      navigate("/");
     }
   };
 
