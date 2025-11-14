@@ -135,13 +135,58 @@ export default function AdminDashboard() {
         { new_password: newPassword },
         { withCredentials: true }
       );
-      toast.success(`Contraseña actualizada para ${resetPasswordUser.name}`);
+      
+      // Store password to display it
+      setResetPasswordDisplay(newPassword);
+      setShowPasswordSuccess(true);
       setShowPasswordReset(false);
-      setResetPasswordUser(null);
-      setNewPassword("");
+      
+      toast.success(`Contraseña actualizada para ${resetPasswordUser.name}`);
     } catch (error) {
       console.error("Error resetting password:", error);
       toast.error(error.response?.data?.detail || "Error al resetear contraseña");
+    }
+  };
+
+  const handleCreateMessage = async () => {
+    if (!messageText.trim()) {
+      toast.error("El mensaje no puede estar vacío");
+      return;
+    }
+
+    try {
+      await axios.post(
+        `${API}/admin/messages`,
+        {
+          text: messageText,
+          target_user_id: messageTargetUser?.id || null, // null = mensaje global
+        },
+        { withCredentials: true }
+      );
+      
+      toast.success(messageTargetUser ? `Mensaje enviado a ${messageTargetUser.name}` : "Mensaje global creado");
+      setShowMessageModal(false);
+      setMessageText("");
+      setMessageTargetUser(null);
+      loadData();
+    } catch (error) {
+      console.error("Error creating message:", error);
+      toast.error(error.response?.data?.detail || "Error al crear mensaje");
+    }
+  };
+
+  const handleDeleteMessage = async (messageId) => {
+    if (!window.confirm("¿Eliminar este mensaje?")) {
+      return;
+    }
+
+    try {
+      await axios.delete(`${API}/admin/messages/${messageId}`, { withCredentials: true });
+      toast.success("Mensaje eliminado");
+      loadData();
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      toast.error("Error al eliminar mensaje");
     }
   };
 
