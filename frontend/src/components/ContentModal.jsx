@@ -44,11 +44,13 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
         );
 
       case "iframe":
+      case "website":
         return (
           <iframe
             src={content}
             className="w-full h-full border-0"
             title={title || "Contenido"}
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           />
         );
 
