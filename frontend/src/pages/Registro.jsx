@@ -109,8 +109,8 @@ export default function Registro() {
             </h1>
             <p className="text-gray-600 mt-2">
               {isLogin 
-                ? "Bienvenido de nuevo a TarjetaDigital"
-                : "Crea tu tarjeta digital en segundos"}
+                ? "Bienvenido de nuevo a TarjetaQR.app"
+                : "Crea tu tarjeta QR en segundos"}
             </p>
           </div>
 
