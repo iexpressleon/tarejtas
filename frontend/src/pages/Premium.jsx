@@ -140,7 +140,7 @@ export default function Premium() {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               {currentUser?.plan === "paid" 
                 ? "Extiende tu suscripción por un año adicional y sigue disfrutando de todas las funciones premium"
-                : "Desbloquea funciones exclusivas y destaca aún más con tu tarjeta digital profesional"
+                : "Desbloquea funciones exclusivas y destaca aún más con tu tarjeta QR profesional"
               }
             </p>
           </div>
