@@ -547,7 +547,7 @@ export default function AdminDashboard() {
           <div className="py-4">
             <Input
               data-testid="new-password-input"
-              type="password"
+              type="text"
               placeholder="Nueva contraseña (mínimo 6 caracteres)"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -567,6 +567,97 @@ export default function AdminDashboard() {
               className="bg-indigo-600 hover:bg-indigo-700"
             >
               Resetear Contraseña
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Password Success Dialog */}
+      <AlertDialog open={showPasswordSuccess} onOpenChange={() => {
+        setShowPasswordSuccess(false);
+        setResetPasswordDisplay("");
+        setResetPasswordUser(null);
+        setNewPassword("");
+      }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>✅ Contraseña Actualizada</AlertDialogTitle>
+            <AlertDialogDescription>
+              La contraseña de <strong>{resetPasswordUser?.name}</strong> ha sido reseteada exitosamente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="py-4 space-y-3">
+            <div className="bg-green-50 border-2 border-green-300 rounded-lg p-4">
+              <p className="text-sm text-gray-600 mb-2">Nueva contraseña temporal:</p>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 bg-white px-4 py-3 rounded text-lg font-bold text-green-700 border border-green-300">
+                  {resetPasswordDisplay}
+                </code>
+                <Button
+                  onClick={() => {
+                    navigator.clipboard.writeText(resetPasswordDisplay);
+                    toast.success("Contraseña copiada al portapapeles");
+                  }}
+                  variant="outline"
+                  size="sm"
+                >
+                  📋 Copiar
+                </Button>
+              </div>
+            </div>
+            <p className="text-sm text-amber-600">
+              ⚠️ Guarda esta contraseña ahora y compártela con el usuario de forma segura. No podrás verla después.
+            </p>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              onClick={() => {
+                setShowPasswordSuccess(false);
+                setResetPasswordDisplay("");
+                setResetPasswordUser(null);
+                setNewPassword("");
+              }}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Entendido
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Message Creation Dialog */}
+      <AlertDialog open={showMessageModal} onOpenChange={() => {
+        setShowMessageModal(false);
+        setMessageText("");
+        setMessageTargetUser(null);
+      }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {messageTargetUser ? `Mensaje para ${messageTargetUser.name}` : "Crear Mensaje Global"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {messageTargetUser 
+                ? `Este mensaje solo será visible para ${messageTargetUser.name} en su dashboard`
+                : "Este mensaje será visible para todos los usuarios en su dashboard"
+              }
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="py-4">
+            <textarea
+              placeholder="Escribe tu mensaje aquí..."
+              value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
+              className="w-full min-h-[100px] p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleCreateMessage}
+              className="bg-indigo-600 hover:bg-indigo-700"
+            >
+              Enviar Mensaje
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
