@@ -55,11 +55,7 @@ export default function TarjetaPublica() {
     if (tarjeta?.telefono) {
       const cleanNumber = tarjeta.telefono.replace(/[^0-9+]/g, "");
       const telUrl = `tel:${cleanNumber}`;
-      
-      setModalType("phone");
-      setModalContent(telUrl);
-      setModalTitle(tarjeta.telefono);
-      setModalOpen(true);
+      window.location.href = telUrl;
     }
   };
 
@@ -70,19 +66,14 @@ export default function TarjetaPublica() {
         return;
       }
       const whatsappUrl = `https://wa.me/${cleanNumber}`;
-      
-      setModalType("whatsapp");
-      setModalContent(whatsappUrl);
-      setModalTitle("WhatsApp");
-      setModalOpen(true);
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     }
   };
 
   const handleEmail = () => {
     if (tarjeta?.email) {
       const mailtoUrl = `mailto:${tarjeta.email}`;
-      
-      setModalType("email");
+      window.location.href = mailtoUrl;
       setModalContent(mailtoUrl);
       setModalTitle(tarjeta.email);
       setModalOpen(true);
