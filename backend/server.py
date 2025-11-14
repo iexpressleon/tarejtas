@@ -90,8 +90,8 @@ class Tarjeta(BaseModel):
     foto_url: Optional[str] = ""
     foto_forma: Optional[str] = "circular"  # 'circular' or 'rectangular'
     qr_url: Optional[str] = ""
-    archivo_negocio: Optional[str] = ""  # PDF or JPG in base64
-    archivo_negocio_tipo: Optional[str] = ""  # 'pdf' or 'jpg'
+    archivo_negocio: Optional[str] = ""  # PDF, JPG or PNG in base64
+    archivo_negocio_tipo: Optional[str] = ""  # 'pdf', 'image', or 'jpg' (legacy)
     archivo_negocio_nombre: Optional[str] = ""
     archivo_negocio_titulo: Optional[str] = ""  # Custom button title
     plantilla_id: int = 1
