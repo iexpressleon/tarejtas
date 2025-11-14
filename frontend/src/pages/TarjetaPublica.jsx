@@ -81,11 +81,12 @@ export default function TarjetaPublica() {
     if (url) {
       let finalUrl = url.trim();
       
+      // Add protocol if missing
       if (!finalUrl.startsWith("http://") && !finalUrl.startsWith("https://")) {
         finalUrl = "https://" + finalUrl;
       }
       
-      // Open directly in new tab
+      // Open directly in new tab (no modal to avoid iframe blocking)
       window.open(finalUrl, "_blank", "noopener,noreferrer");
     }
   };
