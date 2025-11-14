@@ -84,18 +84,17 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
         return (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-green-50 to-green-100 p-8">
             <div className="text-6xl mb-4">📱</div>
-            <h2 className="text-2xl font-bold mb-4">Abriendo WhatsApp...</h2>
-            <p className="text-gray-600 mb-6 text-center">
-              Si no se abre automáticamente, haz clic en el botón de abajo
-            </p>
-            <a
-              href={content}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
+            <h2 className="text-2xl font-bold mb-4 text-center">WhatsApp</h2>
+            <p className="text-gray-600 mb-6 text-center">{title}</p>
+            <Button
+              onClick={() => {
+                window.location.href = content;
+                setTimeout(onClose, 500);
+              }}
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg rounded-xl"
             >
-              Abrir WhatsApp
-            </a>
+              Abrir WhatsApp 💬
+            </Button>
           </div>
         );
 
@@ -103,16 +102,17 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
         return (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 p-8">
             <div className="text-6xl mb-4">📧</div>
-            <h2 className="text-2xl font-bold mb-4">Abriendo Email...</h2>
-            <p className="text-gray-600 mb-6 text-center">
-              Si no se abre automáticamente, haz clic en el botón de abajo
-            </p>
-            <a
-              href={content}
-              className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+            <h2 className="text-2xl font-bold mb-4 text-center">Email</h2>
+            <p className="text-gray-600 mb-6 text-center">{title}</p>
+            <Button
+              onClick={() => {
+                window.location.href = content;
+                setTimeout(onClose, 500);
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl"
             >
-              Enviar Email
-            </a>
+              Enviar Email ✉️
+            </Button>
           </div>
         );
 
@@ -120,16 +120,17 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
         return (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 to-indigo-100 p-8">
             <div className="text-6xl mb-4">📞</div>
-            <h2 className="text-2xl font-bold mb-4">Realizar llamada</h2>
-            <p className="text-gray-600 mb-4 text-center">
-              Número: <span className="font-bold">{title}</span>
-            </p>
-            <a
-              href={content}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
+            <h2 className="text-2xl font-bold mb-4 text-center">Llamar</h2>
+            <p className="text-gray-600 mb-6 text-center font-bold">{title}</p>
+            <Button
+              onClick={() => {
+                window.location.href = content;
+                setTimeout(onClose, 500);
+              }}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-6 text-lg rounded-xl"
             >
-              Llamar Ahora
-            </a>
+              Llamar Ahora 📞
+            </Button>
           </div>
         );
 
