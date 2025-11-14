@@ -322,7 +322,8 @@ async def register(user_input: UserRegister, response: Response):
         secure=True,
         samesite="none",
         path="/",
-        max_age=7*24*60*60
+        max_age=7*24*60*60,
+        domain=None  # Allow all subdomains
     )
     
     return {"success": True, "user_id": user_id, "message": "Registration successful"}
@@ -361,7 +362,8 @@ async def login(user_input: UserLogin, response: Response):
         secure=True,
         samesite="none",
         path="/",
-        max_age=7*24*60*60
+        max_age=7*24*60*60,
+        domain=None  # Allow all subdomains
     )
     
     return {"success": True, "user_id": user["id"], "message": "Login successful"}
