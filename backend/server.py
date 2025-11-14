@@ -536,6 +536,66 @@ async def delete_user(user_id: str, request: Request):
     
     return {"success": True, "message": "User deleted successfully"}
 
+# ============ ADMIN MESSAGES ENDPOINTS ============
+
+@api_router.post("/admin/messages", response_model=AdminMessage)
+async def create_message(message_data: MessageCreate, request: Request):
+    """Create admin message (global or for specific user)"""
+    await require_admin(request)
+    
+    message_doc = {
+        "id": str(uuid.uuid4()),
+        "text": message_data.text,
+        "target_user_id": message_data.target_user_id,
+        "target_user_name": None,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # If target user specified, get their name
+    if message_data.target_user_id:
+        target_user = await db.users.find_one({"id": message_data.target_user_id})
+        if target_user:
+            message_doc["target_user_name"] = target_user.get("name")
+    
+    await db.admin_messages.insert_one(message_doc)
+    
+    return AdminMessage(**message_doc)
+
+@api_router.get("/admin/messages", response_model=List[AdminMessage])
+async def get_all_messages(request: Request):
+    """Get all admin messages (admin only)"""
+    await require_admin(request)
+    
+    messages = await db.admin_messages.find().sort("created_at", -1).to_list(length=None)
+    return [AdminMessage(**msg) for msg in messages]
+
+@api_router.get("/messages/user", response_model=List[AdminMessage])
+async def get_user_messages(request: Request):
+    """Get messages for current user (global + user-specific)"""
+    user = await require_auth(request)
+    
+    # Get global messages and messages targeted to this user
+    messages = await db.admin_messages.find({
+        "$or": [
+            {"target_user_id": None},  # Global messages
+            {"target_user_id": user.id}  # User-specific messages
+        ]
+    }).sort("created_at", -1).to_list(length=None)
+    
+    return [AdminMessage(**msg) for msg in messages]
+
+@api_router.delete("/admin/messages/{message_id}")
+async def delete_message(message_id: str, request: Request):
+    """Delete admin message"""
+    await require_admin(request)
+    
+    result = await db.admin_messages.delete_one({"id": message_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Message not found")
+    
+    return {"success": True, "message": "Message deleted"}
+
 # ============ MERCADO PAGO ENDPOINTS ============
 
 class PaymentPreferenceRequest(BaseModel):
