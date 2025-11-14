@@ -60,11 +60,6 @@ export default function TarjetaPublica() {
       setModalContent(telUrl);
       setModalTitle(tarjeta.telefono);
       setModalOpen(true);
-      
-      // Also trigger the tel: link automatically
-      setTimeout(() => {
-        window.location.href = telUrl;
-      }, 500);
     }
   };
 
