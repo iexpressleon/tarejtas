@@ -281,6 +281,21 @@ export default function TarjetaPublica() {
             </p>
           </div>
         )}
+        
+        {/* Footer with branding */}
+        <div className="mt-8 pt-6 border-t border-white/30 text-center">
+          <p className="text-white/70 text-sm">
+            creada con{" "}
+            <a 
+              href="https://tarjetaqr.app" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="font-semibold text-white hover:underline"
+            >
+              TarjetaQR.app
+            </a>
+          </p>
+        </div>
       </div>
 
       {/* Content Modal */}
