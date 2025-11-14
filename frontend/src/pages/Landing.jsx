@@ -236,7 +236,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 mt-20">
         <div className="container mx-auto px-4 text-center text-gray-600">
-          <p>© 2025 TarjetaDigital. Todos los derechos reservados.</p>
+          <p>© 2025 TarjetaQR.app. Todos los derechos reservados.</p>
         </div>
       </footer>
     </div>
