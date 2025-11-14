@@ -112,20 +112,11 @@ export default function TarjetaPublica() {
         finalUrl = "https://" + finalUrl;
       }
       
-      // Check if it's Google Maps or a regular website
-      const isGoogleMaps = finalUrl.includes("google.com/maps") || finalUrl.includes("maps.google");
-      const isWebsite = finalUrl.startsWith("http://") || finalUrl.startsWith("https://");
-      
-      if (isGoogleMaps || isWebsite) {
-        // Open Google Maps and websites directly in new tab (they block iframes)
-        window.open(finalUrl, "_blank", "noopener,noreferrer");
-      } else {
-        // Try iframe for other content
-        setModalType("iframe");
-        setModalContent(finalUrl);
-        setModalTitle("Enlace");
-        setModalOpen(true);
-      }
+      // All links open in modal with close button
+      setModalType("website");
+      setModalContent(finalUrl);
+      setModalTitle("Enlace");
+      setModalOpen(true);
     }
   };
   
