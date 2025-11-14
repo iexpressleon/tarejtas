@@ -122,6 +122,30 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
+        {/* Admin Messages */}
+        {messages.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">📢 Mensajes del Administrador</h2>
+            <div className="space-y-3">
+              {messages.map((msg) => (
+                <Card
+                  key={msg.id}
+                  className="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl"
+                >
+                  <p className="text-gray-800">{msg.text}</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {new Date(msg.created_at).toLocaleDateString("es-MX", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* User Info */}
         <div className="mb-12">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
