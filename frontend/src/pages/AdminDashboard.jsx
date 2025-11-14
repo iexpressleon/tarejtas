@@ -31,6 +31,14 @@ export default function AdminDashboard() {
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [resetPasswordUser, setResetPasswordUser] = useState(null);
+  const [showPasswordSuccess, setShowPasswordSuccess] = useState(false);
+  const [resetPasswordDisplay, setResetPasswordDisplay] = useState("");
+  
+  // Messages state
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messageText, setMessageText] = useState("");
+  const [messageTargetUser, setMessageTargetUser] = useState(null);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     loadData();
