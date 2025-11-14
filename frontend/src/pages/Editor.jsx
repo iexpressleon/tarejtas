@@ -404,7 +404,7 @@ export default function Editor() {
               <h2 className="text-2xl font-bold mb-6">Información adicional</h2>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="archivo">Documento de negocio (JPG o PDF)</Label>
+                  <Label htmlFor="archivo">Documento de negocio (JPG, PNG o PDF)</Label>
                   <p className="text-sm text-gray-500 mt-1 mb-2">
                     Sube un catálogo, menú, brochure u otro documento (máx. 5MB)
                   </p>
@@ -412,7 +412,7 @@ export default function Editor() {
                     id="archivo"
                     data-testid="archivo-input"
                     type="file"
-                    accept=".jpg,.jpeg,.pdf"
+                    accept=".jpg,.jpeg,.png,.pdf"
                     onChange={handleArchivoNegocioUpload}
                     className="mt-2"
                   />
