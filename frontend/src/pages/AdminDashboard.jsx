@@ -465,6 +465,18 @@ export default function AdminDashboard() {
                           >
                             🗑️ Borrar
                           </Button>
+                          <Button
+                            onClick={() => {
+                              setMessageTargetUser(user);
+                              setMessageText("");
+                              setShowMessageModal(true);
+                            }}
+                            variant="outline"
+                            size="sm"
+                            className="bg-purple-50 hover:bg-purple-100"
+                          >
+                            💬 Mensaje
+                          </Button>
                         </div>
                       </td>
                     </tr>
