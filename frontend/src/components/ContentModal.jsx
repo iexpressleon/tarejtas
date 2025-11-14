@@ -22,11 +22,14 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
     switch (type) {
       case "pdf":
         return (
-          <iframe
-            src={content}
-            className="w-full h-full border-0"
-            title={title || "Documento PDF"}
-          />
+          <div className="w-full h-full overflow-auto bg-gray-100">
+            <iframe
+              src={`${content}#toolbar=0&navpanes=0&scrollbar=1`}
+              className="w-full min-h-full border-0"
+              style={{ minHeight: '200vh' }}
+              title={title || "Documento PDF"}
+            />
+          </div>
         );
 
       case "image":
