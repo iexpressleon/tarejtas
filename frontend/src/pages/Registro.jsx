@@ -61,11 +61,16 @@ export default function Registro() {
         ? { email, password }
         : { name, email, password };
 
-      await axios.post(
+      const response = await axios.post(
         `${API}${endpoint}`,
         payload,
         { withCredentials: true }
       );
+
+      // Save token to localStorage for mobile compatibility
+      if (response.data.session_token) {
+        localStorage.setItem('session_token', response.data.session_token);
+      }
 
       toast.success(isLogin ? "¡Bienvenido de nuevo!" : "¡Cuenta creada exitosamente!");
       
