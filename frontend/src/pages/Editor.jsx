@@ -93,7 +93,7 @@ export default function Editor() {
       // Validate file type
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
       if (!validTypes.includes(file.type)) {
-        toast.error("Solo se permiten archivos JPG o PDF");
+        toast.error("Solo se permiten archivos JPG, PNG o PDF");
         return;
       }
 
@@ -107,7 +107,9 @@ export default function Editor() {
       reader.onloadend = () => {
         const base64String = reader.result;
         setArchivoNegocio(base64String);
-        setArchivoNegocioTipo(file.type.includes('pdf') ? 'pdf' : 'jpg');
+        // Determine type: pdf or image (jpg/png)
+        const tipo = file.type.includes('pdf') ? 'pdf' : 'image';
+        setArchivoNegocioTipo(tipo);
         setArchivoNegocioNombre(file.name);
         toast.success(`Archivo ${file.name} cargado`);
       };
