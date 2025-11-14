@@ -326,7 +326,13 @@ async def register(user_input: UserRegister, response: Response):
         domain=None  # Allow all subdomains
     )
     
-    return {"success": True, "user_id": user_id, "message": "Registration successful"}
+    # Also return token for mobile compatibility (localStorage fallback)
+    return {
+        "success": True, 
+        "user_id": user_id, 
+        "session_token": session_token,
+        "message": "Registration successful"
+    }
 
 @api_router.post("/auth/login")
 async def login(user_input: UserLogin, response: Response):
