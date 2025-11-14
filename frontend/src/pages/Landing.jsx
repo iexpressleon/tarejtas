@@ -40,7 +40,7 @@ export default function Landing() {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
             <span className="text-white font-bold text-xl">T</span>
           </div>
-          <span className="text-2xl font-bold text-gray-900">TarjetaDigital</span>
+          <span className="text-2xl font-bold text-gray-900">TarjetaQR.app</span>
         </div>
         <Button
           data-testid="header-login-btn"
