@@ -80,11 +80,6 @@ export default function TarjetaPublica() {
       setModalContent(whatsappUrl);
       setModalTitle("WhatsApp");
       setModalOpen(true);
-      
-      // Also open in background
-      setTimeout(() => {
-        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-      }, 500);
     }
   };
 
