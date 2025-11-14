@@ -276,7 +276,7 @@ export default function TarjetaPublica() {
                 className="font-semibold hover:underline"
                 style={{ color: colorTema }}
               >
-                TarjetaDigital
+                TarjetaQR.app
               </button>
             </p>
           </div>
