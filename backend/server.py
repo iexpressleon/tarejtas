@@ -372,7 +372,13 @@ async def login(user_input: UserLogin, response: Response):
         domain=None  # Allow all subdomains
     )
     
-    return {"success": True, "user_id": user["id"], "message": "Login successful"}
+    # Also return token for mobile compatibility (localStorage fallback)
+    return {
+        "success": True, 
+        "user_id": user["id"], 
+        "session_token": session_token,
+        "message": "Login successful"
+    }
 
 @api_router.get("/auth/me")
 async def get_me(request: Request):
