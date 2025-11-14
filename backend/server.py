@@ -120,6 +120,7 @@ class TarjetaUpdate(BaseModel):
     whatsapp: Optional[str] = None
     email: Optional[str] = None
     foto_url: Optional[str] = None
+    foto_forma: Optional[str] = None
     archivo_negocio: Optional[str] = None
     archivo_negocio_tipo: Optional[str] = None
     archivo_negocio_nombre: Optional[str] = None
