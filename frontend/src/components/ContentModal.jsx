@@ -18,6 +18,13 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
 
   if (!isOpen) return null;
 
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  const handleOpenExternal = () => {
+    window.open(content, "_blank", "noopener,noreferrer");
+    onClose();
+  };
+
   const renderContent = () => {
     switch (type) {
       case "pdf":
@@ -45,6 +52,25 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
 
       case "iframe":
       case "website":
+        // On mobile, show a button to open externally instead of iframe
+        if (isMobile) {
+          return (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-6 p-8 bg-gradient-to-br from-blue-50 to-purple-50">
+              <div className="text-6xl">🌐</div>
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{title || "Enlace Externo"}</h3>
+                <p className="text-gray-600 mb-6">Se abrirá en una nueva pestaña</p>
+              </div>
+              <Button
+                onClick={handleOpenExternal}
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg rounded-xl"
+              >
+                Abrir Enlace 🔗
+              </Button>
+            </div>
+          );
+        }
+        // On desktop, use iframe
         return (
           <iframe
             src={content}
