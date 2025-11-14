@@ -319,6 +319,53 @@ export default function AdminDashboard() {
           />
         </Card>
 
+        {/* Messages Section */}
+        <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-blue-100 rounded-2xl mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Mensajes a Usuarios</h2>
+            <Button
+              onClick={() => {
+                setMessageTargetUser(null);
+                setMessageText("");
+                setShowMessageModal(true);
+              }}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              ✉️ Crear Mensaje Global
+            </Button>
+          </div>
+          
+          {messages.length > 0 ? (
+            <div className="space-y-3">
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className="flex justify-between items-start p-4 bg-blue-50 rounded-lg border border-blue-200"
+                >
+                  <div className="flex-1">
+                    <p className="text-gray-800">{msg.text}</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {msg.target_user_name ? `Para: ${msg.target_user_name}` : "📢 Global (todos los usuarios)"}
+                      {" • "}
+                      {formatDate(msg.created_at)}
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => handleDeleteMessage(msg.id)}
+                    variant="destructive"
+                    size="sm"
+                    className="ml-4"
+                  >
+                    🗑️
+                  </Button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-center py-4">No hay mensajes activos</p>
+          )}
+        </Card>
+
         {/* Users Table */}
         <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl overflow-x-auto">
           <h2 className="text-2xl font-bold mb-6">Usuarios Registrados</h2>
