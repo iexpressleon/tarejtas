@@ -91,11 +91,6 @@ export default function TarjetaPublica() {
       setModalContent(mailtoUrl);
       setModalTitle(tarjeta.email);
       setModalOpen(true);
-      
-      // Also trigger the mailto: link automatically
-      setTimeout(() => {
-        window.location.href = mailtoUrl;
-      }, 500);
     }
   };
 
