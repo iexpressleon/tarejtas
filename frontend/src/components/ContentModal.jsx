@@ -19,6 +19,7 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
   if (!isOpen) return null;
 
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isAndroid = /Android/i.test(navigator.userAgent);
 
   const handleOpenExternal = () => {
     window.open(content, "_blank", "noopener,noreferrer");
@@ -28,6 +29,25 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
   const renderContent = () => {
     switch (type) {
       case "pdf":
+        // Android tiene problemas con PDFs en iframe - abrir en nueva pestaña
+        if (isAndroid) {
+          return (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-6 p-8 bg-gradient-to-br from-red-50 to-orange-50">
+              <div className="text-6xl">📄</div>
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{title || "Documento PDF"}</h3>
+                <p className="text-gray-600 mb-6">Toca el botón para abrir el PDF</p>
+              </div>
+              <Button
+                onClick={handleOpenExternal}
+                className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white px-8 py-6 text-lg rounded-xl"
+              >
+                Abrir PDF 📄
+              </Button>
+            </div>
+          );
+        }
+        // iPhone/Desktop: usar iframe
         return (
           <div className="w-full h-full overflow-auto bg-gray-100">
             <iframe
