@@ -52,32 +52,21 @@ export default function ContentModal({ isOpen, onClose, type, content, title }) 
 
       case "iframe":
       case "website":
-        // On mobile, show a button to open externally instead of iframe
-        if (isMobile) {
-          return (
-            <div className="w-full h-full flex flex-col items-center justify-center gap-6 p-8 bg-gradient-to-br from-blue-50 to-purple-50">
-              <div className="text-6xl">🌐</div>
-              <div className="text-center">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{title || "Enlace Externo"}</h3>
-                <p className="text-gray-600 mb-6">Se abrirá en una nueva pestaña</p>
-              </div>
-              <Button
-                onClick={handleOpenExternal}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg rounded-xl"
-              >
-                Abrir Enlace 🔗
-              </Button>
-            </div>
-          );
-        }
-        // On desktop, use iframe
+        // Always open external links in new tab (iframes are blocked by most sites)
         return (
-          <iframe
-            src={content}
-            className="w-full h-full border-0"
-            title={title || "Contenido"}
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-          />
+          <div className="w-full h-full flex flex-col items-center justify-center gap-6 p-8 bg-gradient-to-br from-blue-50 to-purple-50">
+            <div className="text-6xl">🌐</div>
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">{title || "Enlace Externo"}</h3>
+              <p className="text-gray-600 mb-6">Se abrirá en una nueva pestaña</p>
+            </div>
+            <Button
+              onClick={handleOpenExternal}
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg rounded-xl"
+            >
+              Abrir Enlace 🔗
+            </Button>
+          </div>
         );
 
       case "whatsapp":
