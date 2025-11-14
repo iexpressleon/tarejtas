@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [tarjetas, setTarjetas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     loadData();
@@ -31,12 +32,14 @@ export default function Dashboard() {
 
   const loadData = async () => {
     try {
-      const [userRes, tarjetasRes] = await Promise.all([
+      const [userRes, tarjetasRes, messagesRes] = await Promise.all([
         axios.get(`${API}/auth/me`, { withCredentials: true }),
         axios.get(`${API}/tarjetas`, { withCredentials: true }),
+        axios.get(`${API}/messages/user`, { withCredentials: true }).catch(() => ({ data: [] })),
       ]);
       setUser(userRes.data);
       setTarjetas(tarjetasRes.data);
+      setMessages(messagesRes.data || []);
     } catch (error) {
       console.error("Error loading data:", error);
       if (error.response?.status === 401) {
