@@ -91,7 +91,7 @@ export default function Editor() {
     const file = e.target.files[0];
     if (file) {
       // Validate file type
-      const validTypes = ['image/jpeg', 'image/jpg', 'application/pdf'];
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
       if (!validTypes.includes(file.type)) {
         toast.error("Solo se permiten archivos JPG o PDF");
         return;
