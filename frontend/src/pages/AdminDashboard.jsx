@@ -46,10 +46,11 @@ export default function AdminDashboard() {
 
   const loadData = async () => {
     try {
-      const [userRes, usersRes, statsRes] = await Promise.all([
+      const [userRes, usersRes, statsRes, messagesRes] = await Promise.all([
         axios.get(`${API}/auth/me`, { withCredentials: true }),
         axios.get(`${API}/admin/users`, { withCredentials: true }),
         axios.get(`${API}/admin/stats`, { withCredentials: true }),
+        axios.get(`${API}/admin/messages`, { withCredentials: true }).catch(() => ({ data: [] })),
       ]);
 
       setCurrentUser(userRes.data);
@@ -63,6 +64,7 @@ export default function AdminDashboard() {
 
       setUsers(usersRes.data);
       setStats(statsRes.data);
+      setMessages(messagesRes.data || []);
     } catch (error) {
       console.error("Error loading data:", error);
       if (error.response?.status === 401 || error.response?.status === 403) {
