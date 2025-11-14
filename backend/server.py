@@ -127,6 +127,18 @@ class TarjetaUpdate(BaseModel):
     archivo_negocio_titulo: Optional[str] = None
     plantilla_id: Optional[int] = None
 
+class AdminMessage(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    text: str
+    target_user_id: Optional[str] = None  # None = global message
+    target_user_name: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class MessageCreate(BaseModel):
+    text: str
+    target_user_id: Optional[str] = None
+
 class Enlace(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
