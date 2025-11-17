@@ -465,6 +465,28 @@ export default function Editor() {
                       alt="QR Code"
                       className="w-48 h-48 border-2 border-gray-200 rounded-lg"
                     />
+                    
+                    {/* URL de la tarjeta */}
+                    <div className="w-full bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <p className="text-xs text-gray-600 mb-1">URL de tu tarjeta:</p>
+                      <div className="flex items-center gap-2">
+                        <code className="flex-1 text-sm text-blue-700 font-mono break-all">
+                          {`${window.location.origin}/t/${tarjeta.slug}`}
+                        </code>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            navigator.clipboard.writeText(`${window.location.origin}/t/${tarjeta.slug}`);
+                            toast.success("URL copiada al portapapeles");
+                          }}
+                          className="shrink-0"
+                        >
+                          📋
+                        </Button>
+                      </div>
+                    </div>
+                    
                     <Button
                       data-testid="download-qr-btn"
                       onClick={() => {
