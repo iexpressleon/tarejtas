@@ -236,6 +236,16 @@ export default function TarjetaPublica() {
 
             {/* Contact Buttons */}
             <div className="space-y-3">
+              {/* Botón Guardar Contacto - PRIMERO */}
+              <button
+                data-testid="save-contact-btn"
+                onClick={handleSaveContact}
+                className="w-full p-4 rounded-xl text-center font-semibold text-white hover:scale-105 transition-transform shadow-md"
+                style={{ backgroundColor: colorTema }}
+              >
+                💾 Guardar Contacto
+              </button>
+
               {tarjeta?.telefono && (
                 <button
                   data-testid="phone-btn"
@@ -246,16 +256,7 @@ export default function TarjetaPublica() {
                   📞 Llamar
                 </button>
               )}
-              {tarjeta?.email && (
-                <button
-                  data-testid="email-btn"
-                  onClick={handleEmail}
-                  className="w-full p-4 rounded-xl text-center font-semibold text-white hover:scale-105 transition-transform shadow-md"
-                  style={{ backgroundColor: colorTema }}
-                >
-                  📧 Enviar email
-                </button>
-              )}
+              
               {tarjeta?.whatsapp && (
                 <button
                   data-testid="whatsapp-btn"
@@ -266,6 +267,7 @@ export default function TarjetaPublica() {
                   📱 WhatsApp
                 </button>
               )}
+              
               {tarjeta?.archivo_negocio && (
                 <button
                   data-testid="archivo-negocio-btn"
@@ -274,6 +276,18 @@ export default function TarjetaPublica() {
                   style={{ backgroundColor: colorTema }}
                 >
                   {tarjeta.archivo_negocio_tipo === 'pdf' ? '📄' : '🖼️'} {tarjeta.archivo_negocio_titulo || (tarjeta.archivo_negocio_tipo === 'pdf' ? 'Ver Catálogo' : 'Ver Imagen')}
+                </button>
+              )}
+              
+              {/* Email al FINAL */}
+              {tarjeta?.email && (
+                <button
+                  data-testid="email-btn"
+                  onClick={handleEmail}
+                  className="w-full p-4 rounded-xl text-center font-semibold text-white hover:scale-105 transition-transform shadow-md"
+                  style={{ backgroundColor: colorTema }}
+                >
+                  📧 Enviar email
                 </button>
               )}
             </div>
