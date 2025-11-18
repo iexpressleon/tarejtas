@@ -90,6 +90,51 @@ export default function TarjetaPublica() {
       window.open(finalUrl, "_blank", "noopener,noreferrer");
     }
   };
+
+  const handleSaveContact = () => {
+    if (!tarjeta) return;
+
+    // Create vCard format
+    const cardUrl = `${window.location.origin}/t/${slug}`;
+    
+    let vcard = "BEGIN:VCARD\n";
+    vcard += "VERSION:3.0\n";
+    vcard += `FN:${tarjeta.nombre}\n`;
+    vcard += `N:${tarjeta.nombre};;;;\n`;
+    
+    if (tarjeta.descripcion) {
+      vcard += `NOTE:${tarjeta.descripcion}\n`;
+    }
+    
+    if (tarjeta.telefono) {
+      vcard += `TEL;TYPE=CELL:${tarjeta.telefono}\n`;
+    }
+    
+    if (tarjeta.email) {
+      vcard += `EMAIL:${tarjeta.email}\n`;
+    }
+    
+    if (tarjeta.whatsapp) {
+      vcard += `TEL;TYPE=WORK:${tarjeta.whatsapp}\n`;
+    }
+    
+    // Add tarjeta QR URL
+    vcard += `URL;TYPE=TarjetaQR:${cardUrl}\n`;
+    vcard += `URL:${cardUrl}\n`;
+    
+    vcard += "END:VCARD";
+
+    // Create blob and download
+    const blob = new Blob([vcard], { type: "text/vcard" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${tarjeta.nombre.replace(/\s+/g, '_')}.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
   
   const handleArchivoClick = () => {
     if (tarjeta?.archivo_negocio) {
