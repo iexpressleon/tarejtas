@@ -404,7 +404,18 @@ export default function Editor() {
                   </p>
                 </div>
                 <div>
-                  <Label htmlFor="email">Email</Label>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="email">Email</Label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={emailVisible}
+                        onChange={(e) => setEmailVisible(e.target.checked)}
+                        className="rounded"
+                      />
+                      <span className="text-gray-600">Mostrar</span>
+                    </label>
+                  </div>
                   <Input
                     id="email"
                     data-testid="email-input"
@@ -412,7 +423,6 @@ export default function Editor() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="tu@email.com"
-                    className="mt-2"
                   />
                 </div>
                 <div>
@@ -425,6 +435,98 @@ export default function Editor() {
                     placeholder="+52 1234567890"
                     className="mt-2"
                   />
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl">
+              <h2 className="text-2xl font-bold mb-6">Redes Sociales</h2>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="instagram">Instagram</Label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={instagramVisible}
+                        onChange={(e) => setInstagramVisible(e.target.checked)}
+                        className="rounded"
+                      />
+                      <span className="text-gray-600">Mostrar</span>
+                    </label>
+                  </div>
+                  <Input
+                    id="instagram"
+                    value={instagram}
+                    onChange={(e) => setInstagram(e.target.value)}
+                    placeholder="https://instagram.com/tuusuario"
+                  />
+                </div>
+                
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="facebook">Facebook</Label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={facebookVisible}
+                        onChange={(e) => setFacebookVisible(e.target.checked)}
+                        className="rounded"
+                      />
+                      <span className="text-gray-600">Mostrar</span>
+                    </label>
+                  </div>
+                  <Input
+                    id="facebook"
+                    value={facebook}
+                    onChange={(e) => setFacebook(e.target.value)}
+                    placeholder="https://facebook.com/tupagina"
+                  />
+                </div>
+                
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="tiktok">TikTok</Label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={tiktokVisible}
+                        onChange={(e) => setTiktokVisible(e.target.checked)}
+                        className="rounded"
+                      />
+                      <span className="text-gray-600">Mostrar</span>
+                    </label>
+                  </div>
+                  <Input
+                    id="tiktok"
+                    value={tiktok}
+                    onChange={(e) => setTiktok(e.target.value)}
+                    placeholder="https://tiktok.com/@tuusuario"
+                  />
+                </div>
+                
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="google_maps">Google Maps</Label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={googleMapsVisible}
+                        onChange={(e) => setGoogleMapsVisible(e.target.checked)}
+                        className="rounded"
+                      />
+                      <span className="text-gray-600">Mostrar</span>
+                    </label>
+                  </div>
+                  <Input
+                    id="google_maps"
+                    value={googleMaps}
+                    onChange={(e) => setGoogleMaps(e.target.value)}
+                    placeholder="https://maps.google.com/..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Copia el enlace de compartir de Google Maps
+                  </p>
                 </div>
               </div>
             </Card>
