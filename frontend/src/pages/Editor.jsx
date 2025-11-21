@@ -26,6 +26,7 @@ export default function Editor() {
   const [telefono, setTelefono] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [email, setEmail] = useState("");
+  const [emailVisible, setEmailVisible] = useState(true);
   const [fotoUrl, setFotoUrl] = useState("");
   const [fotoPreview, setFotoPreview] = useState("");
   const [fotoForma, setFotoForma] = useState("circular");
@@ -33,6 +34,15 @@ export default function Editor() {
   const [archivoNegocioTipo, setArchivoNegocioTipo] = useState("");
   const [archivoNegocioNombre, setArchivoNegocioNombre] = useState("");
   const [archivoNegocioTitulo, setArchivoNegocioTitulo] = useState("");
+  // Social media
+  const [instagram, setInstagram] = useState("");
+  const [instagramVisible, setInstagramVisible] = useState(true);
+  const [facebook, setFacebook] = useState("");
+  const [facebookVisible, setFacebookVisible] = useState(true);
+  const [tiktok, setTiktok] = useState("");
+  const [tiktokVisible, setTiktokVisible] = useState(true);
+  const [googleMaps, setGoogleMaps] = useState("");
+  const [googleMapsVisible, setGoogleMapsVisible] = useState(true);
 
   useEffect(() => {
     loadData();
