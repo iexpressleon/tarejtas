@@ -138,12 +138,21 @@ class TarjetaUpdate(BaseModel):
     telefono: Optional[str] = None
     whatsapp: Optional[str] = None
     email: Optional[str] = None
+    email_visible: Optional[bool] = None
     foto_url: Optional[str] = None
     foto_forma: Optional[str] = None
     archivo_negocio: Optional[str] = None
     archivo_negocio_tipo: Optional[str] = None
     archivo_negocio_nombre: Optional[str] = None
     archivo_negocio_titulo: Optional[str] = None
+    instagram: Optional[str] = None
+    instagram_visible: Optional[bool] = None
+    facebook: Optional[str] = None
+    facebook_visible: Optional[bool] = None
+    tiktok: Optional[str] = None
+    tiktok_visible: Optional[bool] = None
+    google_maps: Optional[str] = None
+    google_maps_visible: Optional[bool] = None
     plantilla_id: Optional[int] = None
 
 class AdminMessage(BaseModel):
