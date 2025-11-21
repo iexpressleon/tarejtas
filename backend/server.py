@@ -114,12 +114,21 @@ class TarjetaCreate(BaseModel):
     telefono: Optional[str] = ""
     whatsapp: Optional[str] = ""
     email: Optional[str] = ""
+    email_visible: Optional[bool] = True
     foto_url: Optional[str] = ""
     foto_forma: Optional[str] = "circular"
     archivo_negocio: Optional[str] = ""
     archivo_negocio_tipo: Optional[str] = ""
     archivo_negocio_nombre: Optional[str] = ""
     archivo_negocio_titulo: Optional[str] = ""
+    instagram: Optional[str] = ""
+    instagram_visible: Optional[bool] = True
+    facebook: Optional[str] = ""
+    facebook_visible: Optional[bool] = True
+    tiktok: Optional[str] = ""
+    tiktok_visible: Optional[bool] = True
+    google_maps: Optional[str] = ""
+    google_maps_visible: Optional[bool] = True
     plantilla_id: Optional[int] = 1
 
 class TarjetaUpdate(BaseModel):
