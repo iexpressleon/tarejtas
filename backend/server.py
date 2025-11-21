@@ -87,6 +87,7 @@ class Tarjeta(BaseModel):
     telefono: Optional[str] = ""  # Phone number for calling
     whatsapp: Optional[str] = ""
     email: Optional[str] = ""
+    email_visible: bool = True  # Show/hide email
     foto_url: Optional[str] = ""
     foto_forma: Optional[str] = "circular"  # 'circular' or 'rectangular'
     qr_url: Optional[str] = ""
@@ -94,6 +95,15 @@ class Tarjeta(BaseModel):
     archivo_negocio_tipo: Optional[str] = ""  # 'pdf', 'image', or 'jpg' (legacy)
     archivo_negocio_nombre: Optional[str] = ""
     archivo_negocio_titulo: Optional[str] = ""  # Custom button title
+    # Social media fields
+    instagram: Optional[str] = ""
+    instagram_visible: bool = True
+    facebook: Optional[str] = ""
+    facebook_visible: bool = True
+    tiktok: Optional[str] = ""
+    tiktok_visible: bool = True
+    google_maps: Optional[str] = ""
+    google_maps_visible: bool = True
     plantilla_id: int = 1
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
