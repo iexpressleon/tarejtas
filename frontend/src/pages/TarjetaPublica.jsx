@@ -280,7 +280,7 @@ export default function TarjetaPublica() {
               )}
               
               {/* Email al FINAL */}
-              {tarjeta?.email && (
+              {tarjeta?.email && tarjeta?.email_visible !== false && (
                 <button
                   data-testid="email-btn"
                   onClick={handleEmail}
@@ -306,6 +306,59 @@ export default function TarjetaPublica() {
                     {enlace.titulo}
                   </button>
                 ))}
+              </div>
+            )}
+
+            {/* Social Media Icons */}
+            {(tarjeta?.instagram || tarjeta?.facebook || tarjeta?.tiktok || tarjeta?.whatsapp || tarjeta?.google_maps) && (
+              <div className="mt-6 pt-6 border-t border-white/30">
+                <div className="flex justify-center gap-4 flex-wrap">
+                  {tarjeta?.instagram && tarjeta?.instagram_visible !== false && (
+                    <button
+                      onClick={() => window.open(tarjeta.instagram.startsWith('http') ? tarjeta.instagram : `https://${tarjeta.instagram}`, '_blank')}
+                      className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                      title="Instagram"
+                    >
+                      <span className="text-2xl">📷</span>
+                    </button>
+                  )}
+                  {tarjeta?.facebook && tarjeta?.facebook_visible !== false && (
+                    <button
+                      onClick={() => window.open(tarjeta.facebook.startsWith('http') ? tarjeta.facebook : `https://${tarjeta.facebook}`, '_blank')}
+                      className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                      title="Facebook"
+                    >
+                      <span className="text-2xl">👥</span>
+                    </button>
+                  )}
+                  {tarjeta?.tiktok && tarjeta?.tiktok_visible !== false && (
+                    <button
+                      onClick={() => window.open(tarjeta.tiktok.startsWith('http') ? tarjeta.tiktok : `https://${tarjeta.tiktok}`, '_blank')}
+                      className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                      title="TikTok"
+                    >
+                      <span className="text-2xl">🎵</span>
+                    </button>
+                  )}
+                  {tarjeta?.whatsapp && (
+                    <button
+                      onClick={handleWhatsApp}
+                      className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                      title="WhatsApp"
+                    >
+                      <span className="text-2xl">💬</span>
+                    </button>
+                  )}
+                  {tarjeta?.google_maps && tarjeta?.google_maps_visible !== false && (
+                    <button
+                      onClick={() => window.open(tarjeta.google_maps.startsWith('http') ? tarjeta.google_maps : `https://${tarjeta.google_maps}`, '_blank')}
+                      className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                      title="Google Maps"
+                    >
+                      <span className="text-2xl">📍</span>
+                    </button>
+                  )}
+                </div>
               </div>
             )}
 
