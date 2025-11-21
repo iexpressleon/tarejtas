@@ -63,6 +63,7 @@ export default function Editor() {
       setTelefono(t.telefono || "");
       setWhatsapp(t.whatsapp || "");
       setEmail(t.email || "");
+      setEmailVisible(t.email_visible !== false);
       setFotoUrl(t.foto_url || "");
       setFotoPreview(t.foto_url || "");
       setFotoForma(t.foto_forma || "circular");
@@ -70,6 +71,15 @@ export default function Editor() {
       setArchivoNegocioTipo(t.archivo_negocio_tipo || "");
       setArchivoNegocioNombre(t.archivo_negocio_nombre || "");
       setArchivoNegocioTitulo(t.archivo_negocio_titulo || "");
+      // Social media
+      setInstagram(t.instagram || "");
+      setInstagramVisible(t.instagram_visible !== false);
+      setFacebook(t.facebook || "");
+      setFacebookVisible(t.facebook_visible !== false);
+      setTiktok(t.tiktok || "");
+      setTiktokVisible(t.tiktok_visible !== false);
+      setGoogleMaps(t.google_maps || "");
+      setGoogleMapsVisible(t.google_maps_visible !== false);
       setEnlaces(enlacesRes.data);
     } catch (error) {
       console.error("Error loading data:", error);
