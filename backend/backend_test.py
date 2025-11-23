@@ -1103,6 +1103,64 @@ class TarjetaDigitalAPITester:
         except Exception as e:
             return self.log_result("POST /api/auth/logout", False, str(e))
 
+    def test_mercado_pago_app_usr_token_validation(self):
+        """Test specific APP_USR token validation as requested"""
+        print("\n📝 Testing Mercado Pago APP_USR token validation...")
+        
+        try:
+            # The specific token to test
+            app_usr_token = "APP_USR-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613"
+            
+            print(f"Testing APP_USR token: {app_usr_token}")
+            
+            # Direct API call to Mercado Pago to validate token
+            response = requests.get(
+                "https://api.mercadopago.com/users/me",
+                headers={"Authorization": f"Bearer {app_usr_token}"},
+                timeout=10
+            )
+            
+            print(f"Mercado Pago API Response Status: {response.status_code}")
+            print(f"Mercado Pago API Response Body: {response.text}")
+            
+            if response.status_code == 200:
+                data = response.json()
+                user_id = data.get("id")
+                email = data.get("email")
+                return self.log_result("APP_USR Token Validation", True, 
+                    f"✅ TOKEN VALID - User ID: {user_id}, Email: {email}")
+            elif response.status_code == 401:
+                return self.log_result("APP_USR Token Validation", False, 
+                    f"❌ TOKEN INVALID - 401 Unauthorized: {response.text}")
+            else:
+                return self.log_result("APP_USR Token Validation", False, 
+                    f"❌ UNEXPECTED RESPONSE - Status {response.status_code}: {response.text}")
+                    
+        except Exception as e:
+            return self.log_result("APP_USR Token Validation", False, f"❌ ERROR: {str(e)}")
+
+    def run_token_validation_test(self):
+        """Run only the token validation test as requested"""
+        print("=" * 70)
+        print("🔑 Mercado Pago APP_USR Token Validation Test")
+        print("   Testing token: APP_USR-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613")
+        print("=" * 70)
+        
+        # Run the specific test
+        self.test_mercado_pago_app_usr_token_validation()
+        
+        # Summary
+        print("\n" + "=" * 70)
+        print(f"📊 Token Validation Test Summary: {self.tests_passed}/{self.tests_run} tests passed")
+        print("=" * 70)
+        
+        if self.tests_passed == self.tests_run:
+            print("✅ Token validation test passed!")
+            return 0
+        else:
+            print(f"❌ Token validation test failed")
+            return 1
+
     def run_mercado_pago_review_tests(self):
         """Run specific tests for Mercado Pago integration review with updated TEST access token"""
         print("=" * 70)
