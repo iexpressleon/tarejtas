@@ -1393,6 +1393,8 @@ def main():
             return tester.run_new_features_tests()
         elif sys.argv[1] == "--mercado-pago":
             return tester.run_mercado_pago_review_tests()
+        elif sys.argv[1] == "--token-validation":
+            return tester.run_token_validation_test()
     
     return tester.run_all_tests()
 
