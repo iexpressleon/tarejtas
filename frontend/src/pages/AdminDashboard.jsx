@@ -34,6 +34,11 @@ export default function AdminDashboard() {
   const [showPasswordSuccess, setShowPasswordSuccess] = useState(false);
   const [resetPasswordDisplay, setResetPasswordDisplay] = useState("");
   
+  // Expiration date state
+  const [showExpirationModal, setShowExpirationModal] = useState(false);
+  const [expirationUser, setExpirationUser] = useState(null);
+  const [newExpirationDate, setNewExpirationDate] = useState("");
+  
   // Messages state
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageText, setMessageText] = useState("");
