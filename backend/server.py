@@ -540,8 +540,12 @@ async def update_user_expiration(user_id: str, expiration_data: ExpirationUpdate
         raise HTTPException(status_code=404, detail="User not found")
     
     try:
-        # Parse and validate date
+        # Parse and validate date - make it timezone aware
         expiration_date = datetime.fromisoformat(expiration_data.expiration_date.replace('Z', '+00:00'))
+        
+        # If date is naive (no timezone), add UTC timezone
+        if expiration_date.tzinfo is None:
+            expiration_date = expiration_date.replace(tzinfo=timezone.utc)
         
         # Update user expiration
         update_fields = {}
