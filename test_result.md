@@ -259,7 +259,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Mercado Pago Payment Integration"
     - "Payment Flow UI"
     - "Delete User Admin Functionality"
     - "Delete User Button Admin UI"
