@@ -141,7 +141,7 @@ backend:
 
   - task: "Mercado Pago Payment Integration"
     implemented: true
-    working: false
+    working: true
     file: "backend/server.py"
     stuck_count: 1
     priority: "high"
