@@ -62,38 +62,7 @@ export default function Premium() {
     }
   };
 
-  const features = [
-    {
-      title: "Sin marca TarjetaQR.app",
-      description: "Remueve el footer con nuestra marca",
-      icon: "✨",
-    },
-    {
-      title: "Más plantillas",
-      description: "Acceso a plantillas premium exclusivas",
-      icon: "🎨",
-    },
-    {
-      title: "Estadísticas",
-      description: "Ve quién visita tu tarjeta y cuándo",
-      icon: "📈",
-    },
-    {
-      title: "Más enlaces",
-      description: "Enlaces ilimitados (free: hasta 10)",
-      icon: "🔗",
-    },
-    {
-      title: "Soporte prioritario",
-      description: "Respuestas rápidas a tus consultas",
-      icon: "👥",
-    },
-    {
-      title: "Dominio personalizado",
-      description: "Usa tu propio dominio para tu tarjeta",
-      icon: "🌐",
-    },
-  ];
+  // Features list removed
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
