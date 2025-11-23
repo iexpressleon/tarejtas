@@ -195,6 +195,29 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleUpdateExpiration = async () => {
+    if (!newExpirationDate) {
+      toast.error("Por favor selecciona una fecha");
+      return;
+    }
+
+    try {
+      await axios.put(
+        `${API}/admin/users/${expirationUser.id}/update-expiration`,
+        { expiration_date: newExpirationDate },
+        { withCredentials: true }
+      );
+      toast.success(`Fecha de vencimiento actualizada para ${expirationUser.name}`);
+      setShowExpirationModal(false);
+      setExpirationUser(null);
+      setNewExpirationDate("");
+      loadData();
+    } catch (error) {
+      console.error("Error updating expiration:", error);
+      toast.error(error.response?.data?.detail || "Error al actualizar fecha");
+    }
+  };
+
   const handleDeleteUser = async (userId, userName) => {
     if (!window.confirm(`¿Estás seguro de eliminar al usuario ${userName}? Esta acción no se puede deshacer y eliminará toda su información.`)) {
       return;
