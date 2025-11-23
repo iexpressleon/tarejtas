@@ -137,7 +137,7 @@ backend:
         comment: "QR code generation endpoint exists at POST /api/tarjetas/{tarjeta_id}/generate-qr. Uses FRONTEND_URL env var and creates QR with api.qrserver.com. Need to test if QR codes link correctly to public cards."
       - working: true
         agent: "testing"
-        comment: "✅ QR CODE FUNCTIONALITY VERIFIED: QR generation endpoint working correctly, generates proper QR URLs using api.qrserver.com, QR codes contain correct frontend URL (https://bizcard-digital-1.preview.emergentagent.com/t/{slug}), and public card endpoint (/api/tarjetas/slug/{slug}) accessible without authentication. All QR-related tests passed."
+        comment: "✅ QR CODE FUNCTIONALITY VERIFIED: QR generation endpoint working correctly, generates proper QR URLs using api.qrserver.com, QR codes contain correct frontend URL (https://digicard-10.preview.emergentagent.com/t/{slug}), and public card endpoint (/api/tarjetas/slug/{slug}) accessible without authentication. All QR-related tests passed."
 
   - task: "Mercado Pago Payment Integration"
     implemented: true
