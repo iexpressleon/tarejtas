@@ -672,6 +672,46 @@ export default function AdminDashboard() {
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Expiration Date Update Dialog */}
+      <AlertDialog open={showExpirationModal} onOpenChange={() => {
+        setShowExpirationModal(false);
+        setExpirationUser(null);
+        setNewExpirationDate("");
+      }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Modificar Fecha de Vencimiento</AlertDialogTitle>
+            <AlertDialogDescription>
+              Actualiza la fecha de vencimiento de la suscripción de <strong>{expirationUser?.name}</strong>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="py-4">
+            <label className="block text-sm font-medium mb-2">Nueva Fecha de Vencimiento:</label>
+            <input
+              type="datetime-local"
+              value={newExpirationDate}
+              onChange={(e) => setNewExpirationDate(e.target.value)}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <p className="text-xs text-gray-500 mt-2">
+              Actual: {expirationUser?.plan === "trial" 
+                ? new Date(expirationUser?.trial_ends_at).toLocaleString("es-MX")
+                : new Date(expirationUser?.subscription_ends_at).toLocaleString("es-MX")
+              }
+            </p>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleUpdateExpiration}
+              className="bg-indigo-600 hover:bg-indigo-700"
+            >
+              Actualizar Fecha
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Message Creation Dialog */}
       <AlertDialog open={showMessageModal} onOpenChange={() => {
         setShowMessageModal(false);
