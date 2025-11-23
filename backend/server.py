@@ -736,8 +736,7 @@ async def create_payment_preference(payment_data: PaymentPreferenceRequest, requ
             },
             "auto_return": "approved",
             "external_reference": user_doc["id"],
-            "statement_descriptor": "TARJETAQR SUSCRIPCION",
-            "notification_url": f"{frontend_url}/api/payments/webhook"
+            "statement_descriptor": "TARJETAQR SUSCRIPCION"
         }
         
         # Create preference
