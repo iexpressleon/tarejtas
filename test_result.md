@@ -264,8 +264,7 @@ test_plan:
     - "Delete User Admin Functionality"
     - "Delete User Button Admin UI"
     - "Domain Configuration Update"
-  stuck_tasks:
-    - "Mercado Pago Payment Integration"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
