@@ -168,6 +168,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ MERCADO PAGO APP_USR TOKEN VALIDATION SUCCESS: Direct API validation of the APP_USR token 'APP_USR-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613' completed successfully. TOKEN STATUS: VALID ✅ - Mercado Pago API returned 200 OK with user details (User ID: 2986635613, Test User: true, Email: test_user_24589333929745981@testuser.com). This APP_USR token is working correctly and can be used for Mercado Pago integration. Backend implementation is fully functional with this valid token."
+      - working: true
+        agent: "testing"
+        comment: "✅ NEW PRODUCTION TOKEN VALIDATION SUCCESS: Direct API validation of the NEW PRODUCTION access token 'APP_USR-1733766829848492-111222-1d20820f90a24b4b0fc94fbee12b5189-1060383245' completed successfully. TOKEN STATUS: VALID ✅ - Mercado Pago API returned 200 OK with user details (User ID: 1060383245, Email: antoniormzr93@gmail.com, Name: Antonio Ramirez Rueda, Country: MX, Site: MLM). This is a confirmed PRODUCTION token (not test mode) and is ready for production use. Token validation test passed completely."
   
   - task: "Delete User Admin Functionality"
     implemented: true
