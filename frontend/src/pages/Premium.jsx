@@ -177,24 +177,7 @@ export default function Premium() {
             </div>
           </Card>
 
-          {/* Features Grid */}
-          <div className="pt-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">
-              Todo lo que obtienes
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((feature, index) => (
-                <Card
-                  key={index}
-                  className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 hover:border-indigo-200 rounded-2xl hover:shadow-xl transition-all text-left"
-                >
-                  <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 text-sm">{feature.description}</p>
-                </Card>
-              ))}
-            </div>
-          </div>
+          {/* Features section removed */}
         </div>
       </main>
     </div>
