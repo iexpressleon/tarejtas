@@ -527,6 +527,49 @@ async def get_admin_stats(request: Request):
 class PasswordReset(BaseModel):
     new_password: str
 
+class ExpirationUpdate(BaseModel):
+    expiration_date: str  # ISO format date string
+
+@api_router.put("/admin/users/{user_id}/update-expiration")
+async def update_user_expiration(user_id: str, expiration_data: ExpirationUpdate, request: Request):
+    """Update user subscription expiration date (admin only)"""
+    await require_admin(request)
+    
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    try:
+        # Parse and validate date
+        expiration_date = datetime.fromisoformat(expiration_data.expiration_date.replace('Z', '+00:00'))
+        
+        # Update user expiration
+        update_fields = {}
+        if user.get("plan") == "trial":
+            update_fields["trial_ends_at"] = expiration_date.isoformat()
+        else:
+            update_fields["subscription_ends_at"] = expiration_date.isoformat()
+        
+        # Check if subscription is expired or active
+        now = datetime.now(timezone.utc)
+        if expiration_date > now:
+            update_fields["is_active"] = True
+            if user.get("plan") != "trial":
+                update_fields["plan"] = "paid"
+        else:
+            update_fields["is_active"] = False
+            update_fields["plan"] = "expired"
+        
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": update_fields}
+        )
+        
+        return {"success": True, "message": "Expiration date updated successfully"}
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid date format: {str(e)}")
+
 @api_router.put("/admin/users/{user_id}/reset-password")
 async def reset_user_password(user_id: str, password_data: PasswordReset, request: Request):
     """Reset user password (admin only)"""
