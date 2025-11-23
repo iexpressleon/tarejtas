@@ -15,7 +15,8 @@ import bcrypt
 
 class MercadoPagoTester:
     def __init__(self):
-        self.backend_url = "https://tarjetaqr.app/api"
+        # Use local backend for testing since we have access to the database
+        self.backend_url = "http://localhost:8001/api"
         self.access_token = "TEST-8178565988387443-111222-496c2904120a7557a8b9d3f4a81b2cc1-2986635613"
         self.tests_run = 0
         self.tests_passed = 0
