@@ -485,6 +485,25 @@ export default function AdminDashboard() {
                             🔑 Reset
                           </Button>
                           <Button
+                            onClick={() => {
+                              setExpirationUser(user);
+                              // Set current expiration or default to 1 year from now
+                              const currentExp = user.plan === "trial" 
+                                ? user.trial_ends_at 
+                                : user.subscription_ends_at;
+                              const date = currentExp 
+                                ? new Date(currentExp).toISOString().slice(0, 16)
+                                : new Date(Date.now() + 365*24*60*60*1000).toISOString().slice(0, 16);
+                              setNewExpirationDate(date);
+                              setShowExpirationModal(true);
+                            }}
+                            variant="outline"
+                            size="sm"
+                            className="bg-amber-50 hover:bg-amber-100"
+                          >
+                            📅 Fecha
+                          </Button>
+                          <Button
                             data-testid={`delete-user-btn-${user.id}`}
                             onClick={() => handleDeleteUser(user.id, user.name)}
                             variant="destructive"
