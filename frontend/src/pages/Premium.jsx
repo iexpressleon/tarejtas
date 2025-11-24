@@ -10,9 +10,7 @@ const API = `${BACKEND_URL}/api`;
 
 export default function Premium() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [checkoutUrl, setCheckoutUrl] = useState(null);
 
   useEffect(() => {
     loadUser();
