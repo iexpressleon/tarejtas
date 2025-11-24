@@ -36,14 +36,18 @@ export default function Dashboard() {
 
   const loadData = async () => {
     try {
-      const [userRes, tarjetasRes, messagesRes] = await Promise.all([
+      const [userRes, tarjetasRes, messagesRes, settingsRes] = await Promise.all([
         axios.get(`${API}/auth/me`, { withCredentials: true }),
         axios.get(`${API}/tarjetas`, { withCredentials: true }),
         axios.get(`${API}/messages/user`, { withCredentials: true }).catch(() => ({ data: [] })),
+        axios.get(`${API}/settings`, { withCredentials: true }).catch(() => ({ 
+          data: { payment_message: "💳 Por favor envía tu comprobante de pago", whatsapp_number: "4774776685727" } 
+        })),
       ]);
       setUser(userRes.data);
       setTarjetas(tarjetasRes.data);
       setMessages(messagesRes.data || []);
+      setAppSettings(settingsRes.data);
     } catch (error) {
       console.error("Error loading data:", error);
       if (error.response?.status === 401) {
