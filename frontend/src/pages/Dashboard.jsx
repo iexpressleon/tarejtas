@@ -25,6 +25,10 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [appSettings, setAppSettings] = useState({
+    payment_message: "💳 Por favor envía tu comprobante de pago",
+    whatsapp_number: "4774776685727"
+  });
 
   useEffect(() => {
     loadData();
