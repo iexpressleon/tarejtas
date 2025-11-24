@@ -44,6 +44,11 @@ export default function AdminDashboard() {
   const [messageText, setMessageText] = useState("");
   const [messageTargetUser, setMessageTargetUser] = useState(null);
   const [messages, setMessages] = useState([]);
+  
+  // App Settings state
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [paymentMessage, setPaymentMessage] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
 
   useEffect(() => {
     loadData();
