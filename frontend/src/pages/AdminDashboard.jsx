@@ -56,11 +56,14 @@ export default function AdminDashboard() {
 
   const loadData = async () => {
     try {
-      const [userRes, usersRes, statsRes, messagesRes] = await Promise.all([
+      const [userRes, usersRes, statsRes, messagesRes, settingsRes] = await Promise.all([
         axios.get(`${API}/auth/me`, { withCredentials: true }),
         axios.get(`${API}/admin/users`, { withCredentials: true }),
         axios.get(`${API}/admin/stats`, { withCredentials: true }),
         axios.get(`${API}/admin/messages`, { withCredentials: true }).catch(() => ({ data: [] })),
+        axios.get(`${API}/settings`, { withCredentials: true }).catch(() => ({ 
+          data: { payment_message: "💳 Por favor envía tu comprobante de pago", whatsapp_number: "4774776685727" } 
+        })),
       ]);
 
       setCurrentUser(userRes.data);
@@ -75,6 +78,8 @@ export default function AdminDashboard() {
       setUsers(usersRes.data);
       setStats(statsRes.data);
       setMessages(messagesRes.data || []);
+      setPaymentMessage(settingsRes.data.payment_message);
+      setWhatsappNumber(settingsRes.data.whatsapp_number);
     } catch (error) {
       console.error("Error loading data:", error);
       if (error.response?.status === 401 || error.response?.status === 403) {
