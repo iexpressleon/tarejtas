@@ -30,36 +30,15 @@ export default function Premium() {
     }
   };
 
-  const handleUpgrade = async () => {
+  const handleUpgrade = () => {
     if (!currentUser) {
       toast.error("Debes iniciar sesión para actualizar");
       navigate("/registro");
       return;
     }
 
-    setLoading(true);
-    
-    try {
-      const response = await axios.post(
-        `${API}/payments/create-preference`,
-        { user_id: currentUser.id },
-        { withCredentials: true }
-      );
-      
-      const { init_point } = response.data;
-      
-      if (init_point) {
-        // Redirect to Mercado Pago checkout
-        window.location.href = init_point;
-      } else {
-        toast.error("Error al crear la preferencia de pago");
-      }
-    } catch (error) {
-      console.error("Error creating payment:", error);
-      toast.error(error.response?.data?.detail || "Error al procesar el pago");
-    } finally {
-      setLoading(false);
-    }
+    // Redirect directly to Mercado Pago payment link
+    window.open("https://mpago.la/1JMASFb", "_blank");
   };
 
   // Features list removed
