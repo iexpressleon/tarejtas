@@ -247,6 +247,30 @@ export default function AdminDashboard() {
     setSelectedUser(null);
   };
 
+  const handleUpdateSettings = async () => {
+    if (!paymentMessage.trim() || !whatsappNumber.trim()) {
+      toast.error("Por favor completa todos los campos");
+      return;
+    }
+
+    try {
+      await axios.put(
+        `${API}/admin/settings`,
+        { 
+          payment_message: paymentMessage,
+          whatsapp_number: whatsappNumber 
+        },
+        { withCredentials: true }
+      );
+      toast.success("Configuración actualizada exitosamente");
+      setShowSettingsModal(false);
+      loadData();
+    } catch (error) {
+      console.error("Error updating settings:", error);
+      toast.error(error.response?.data?.detail || "Error al actualizar configuración");
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
