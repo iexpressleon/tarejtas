@@ -328,6 +328,14 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-4">
             <Button
+              data-testid="settings-btn"
+              variant="outline"
+              onClick={() => setShowSettingsModal(true)}
+              className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white border-0 hover:from-purple-600 hover:to-indigo-700"
+            >
+              ⚙️ Configuración
+            </Button>
+            <Button
               data-testid="back-to-dashboard-btn"
               variant="outline"
               onClick={() => navigate("/dashboard")}
