@@ -186,6 +186,17 @@ class EnlaceUpdate(BaseModel):
     url: Optional[str] = None
     orden: Optional[int] = None
 
+class AppSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "app_settings"  # Single document ID
+    payment_message: str = "💳 Por favor envía tu comprobante de pago"
+    whatsapp_number: str = "4774776685727"
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class SettingsUpdate(BaseModel):
+    payment_message: Optional[str] = None
+    whatsapp_number: Optional[str] = None
+
 # ============ AUTH HELPERS ============
 
 async def get_current_user(request: Request) -> Optional[User]:
