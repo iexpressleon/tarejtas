@@ -104,14 +104,11 @@ export default function Premium() {
               <Button
                 data-testid="upgrade-btn"
                 onClick={handleUpgrade}
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-6 text-lg rounded-xl hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-6 text-lg rounded-xl hover:scale-105 transition-all shadow-lg"
               >
-                {loading 
-                  ? "Procesando..." 
-                  : currentUser?.plan === "paid" 
-                    ? "💳 Renovar por 1 año más" 
-                    : "💳 Pagar con Mercado Pago"
+                {currentUser?.plan === "paid" 
+                  ? "💳 Renovar por 1 año más" 
+                  : "💳 Pagar con Mercado Pago"
                 }
               </Button>
               <p className="text-sm text-gray-500">
