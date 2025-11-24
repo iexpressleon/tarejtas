@@ -206,6 +206,22 @@ export default function Dashboard() {
                       </p>
                     )}
                   </div>
+                  
+                  {/* Payment Report Section */}
+                  <div className="pt-3 border-t border-gray-200">
+                    <p className="text-sm text-gray-700 mb-2 font-medium">
+                      💳 Por favor envía tu comprobante de pago
+                    </p>
+                    <Button
+                      data-testid="report-payment-btn"
+                      onClick={() => window.open("https://wa.me/4774776685727", "_blank")}
+                      size="sm"
+                      className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white"
+                    >
+                      📱 Reporta pago
+                    </Button>
+                  </div>
+
                   {user.role === 'admin' && (
                     <Button
                       data-testid="admin-panel-btn"
