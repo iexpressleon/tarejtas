@@ -791,6 +791,63 @@ export default function AdminDashboard() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Settings Modal */}
+      <AlertDialog open={showSettingsModal} onOpenChange={(open) => {
+        setShowSettingsModal(open);
+        if (!open) {
+          loadData(); // Reload settings if modal closed
+        }
+      }}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              ⚙️ Configuración del Sistema
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Configura el mensaje de pago y el número de WhatsApp que verán los usuarios
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mensaje de Pago
+              </label>
+              <Input
+                type="text"
+                value={paymentMessage}
+                onChange={(e) => setPaymentMessage(e.target.value)}
+                placeholder="💳 Por favor envía tu comprobante de pago"
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Número de WhatsApp (sin +)
+              </label>
+              <Input
+                type="text"
+                value={whatsappNumber}
+                onChange={(e) => setWhatsappNumber(e.target.value)}
+                placeholder="4774776685727"
+                className="w-full"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Ejemplo: 4774776685727 (código de país + número)
+              </p>
+            </div>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleUpdateSettings}
+              className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
+            >
+              💾 Guardar Cambios
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
