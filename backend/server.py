@@ -696,6 +696,51 @@ async def delete_message(message_id: str, request: Request):
     
     return {"success": True, "message": "Message deleted"}
 
+# ============ APP SETTINGS ENDPOINTS ============
+
+@api_router.get("/settings", response_model=AppSettings)
+async def get_app_settings(request: Request):
+    """Get app settings (payment message and WhatsApp number)"""
+    # Any authenticated user can view settings
+    user = await require_auth(request)
+    
+    settings_doc = await db.app_settings.find_one({"id": "app_settings"})
+    
+    if not settings_doc:
+        # Return default settings if not configured
+        default_settings = AppSettings()
+        return default_settings
+    
+    return AppSettings(**settings_doc)
+
+@api_router.put("/admin/settings")
+async def update_app_settings(settings_update: SettingsUpdate, request: Request):
+    """Update app settings (admin only)"""
+    await require_admin(request)
+    
+    update_data = {}
+    if settings_update.payment_message is not None:
+        update_data["payment_message"] = settings_update.payment_message
+    if settings_update.whatsapp_number is not None:
+        update_data["whatsapp_number"] = settings_update.whatsapp_number
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    # Upsert the settings document
+    result = await db.app_settings.update_one(
+        {"id": "app_settings"},
+        {"$set": update_data},
+        upsert=True
+    )
+    
+    # Get updated settings
+    settings_doc = await db.app_settings.find_one({"id": "app_settings"})
+    
+    return AppSettings(**settings_doc)
+
 # ============ MERCADO PAGO ENDPOINTS ============
 
 class PaymentPreferenceRequest(BaseModel):
