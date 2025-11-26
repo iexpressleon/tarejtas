@@ -105,6 +105,7 @@ class Tarjeta(BaseModel):
     google_maps: Optional[str] = ""
     google_maps_visible: bool = True
     plantilla_id: int = 1
+    visit_count: int = 0  # Track number of visits to public card
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class TarjetaCreate(BaseModel):
