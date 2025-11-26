@@ -939,6 +939,19 @@ async def get_tarjeta_by_slug(slug: str):
     
     return tarjeta
 
+@api_router.post("/tarjetas/slug/{slug}/visit")
+async def increment_visit_count(slug: str):
+    """Increment visit count for a tarjeta (public endpoint)"""
+    result = await db.tarjetas.update_one(
+        {"slug": slug},
+        {"$inc": {"visit_count": 1}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Tarjeta not found")
+    
+    return {"success": True, "message": "Visit count incremented"}
+
 @api_router.post("/tarjetas", response_model=Tarjeta)
 async def create_tarjeta(tarjeta_input: TarjetaCreate, request: Request):
     """Create new tarjeta"""
