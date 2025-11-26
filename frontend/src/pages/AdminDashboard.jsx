@@ -83,6 +83,19 @@ export default function AdminDashboard() {
       setMessages(messagesRes.data || []);
       setPaymentMessage(settingsRes.data.payment_message);
       setWhatsappNumber(settingsRes.data.whatsapp_number);
+      
+      // Load visit counts for each user
+      const visitsMap = {};
+      for (const user of usersRes.data) {
+        try {
+          const tarjetasRes = await axios.get(`${API}/tarjetas/user/${user.id}`, { withCredentials: true });
+          const totalVisits = tarjetasRes.data.reduce((sum, tarjeta) => sum + (tarjeta.visit_count || 0), 0);
+          visitsMap[user.id] = totalVisits;
+        } catch (error) {
+          visitsMap[user.id] = 0;
+        }
+      }
+      setUserVisits(visitsMap);
     } catch (error) {
       console.error("Error loading data:", error);
       if (error.response?.status === 401 || error.response?.status === 403) {
