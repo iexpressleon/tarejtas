@@ -40,6 +40,11 @@ export default function TarjetaPublica() {
         // Get enlaces by tarjeta_id
         const enlacesById = await axios.get(`${API}/enlaces/${tarjetaRes.data.id}`);
         setEnlaces(enlacesById.data);
+        
+        // Increment visit count (fire and forget)
+        axios.post(`${API}/tarjetas/slug/${slug}/visit`).catch(() => {
+          // Ignore errors for visit tracking
+        });
       }
     } catch (error) {
       console.error("Error loading tarjeta:", error);
