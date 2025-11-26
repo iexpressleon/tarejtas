@@ -447,6 +447,7 @@ export default function AdminDashboard() {
                   <th className="text-left p-3 font-semibold">Plan</th>
                   <th className="text-left p-3 font-semibold">Vencimiento</th>
                   <th className="text-left p-3 font-semibold">Días Rest.</th>
+                  <th className="text-left p-3 font-semibold">Visitas</th>
                   <th className="text-left p-3 font-semibold">Licencia</th>
                   <th className="text-left p-3 font-semibold">Estado</th>
                   <th className="text-center p-3 font-semibold">Acciones</th>
