@@ -308,6 +308,17 @@ export default function Dashboard() {
                       </p>
                     )}
 
+                    {/* Visit Counter */}
+                    <div className="flex items-center gap-2 py-2 px-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      <span className="text-sm font-semibold text-gray-700">
+                        {tarjeta.visit_count || 0} visitas
+                      </span>
+                    </div>
+
                     <div className="flex gap-2 pt-2">
                       <Button
                         data-testid={`edit-tarjeta-btn-${tarjeta.id}`}
