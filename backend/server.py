@@ -912,6 +912,19 @@ async def get_tarjetas(request: Request):
     
     return tarjetas
 
+@api_router.get("/tarjetas/user/{user_id}", response_model=List[Tarjeta])
+async def get_user_tarjetas(user_id: str, request: Request):
+    """Get all tarjetas for a specific user (admin only)"""
+    await require_admin(request)
+    
+    tarjetas = await db.tarjetas.find({"usuario_id": user_id}, {"_id": 0}).to_list(100)
+    
+    for tarjeta in tarjetas:
+        if isinstance(tarjeta.get('created_at'), str):
+            tarjeta['created_at'] = datetime.fromisoformat(tarjeta['created_at'])
+    
+    return tarjetas
+
 @api_router.get("/tarjetas/{tarjeta_id}", response_model=Tarjeta)
 async def get_tarjeta(tarjeta_id: str, request: Request):
     """Get specific tarjeta"""
