@@ -496,6 +496,17 @@ export default function AdminDashboard() {
                         )}
                       </td>
                       <td className="p-3">
+                        <div className="flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                          </svg>
+                          <span className="font-semibold text-gray-700">
+                            {userVisits[user.id] || 0}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="p-3">
                         <code className="text-xs bg-gray-100 px-2 py-1 rounded">
                           {user.license_key?.substring(0, 8)}...
                         </code>
