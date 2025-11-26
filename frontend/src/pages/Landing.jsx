@@ -233,6 +233,83 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Lo que dicen nuestros usuarios
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Miles de profesionales ya están usando TarjetaQR.app
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Testimonio 1 */}
+          <Card className="p-8 bg-white border-2 border-gray-100 rounded-2xl hover:shadow-xl transition-all">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl">M</span>
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900">María González</h4>
+                <p className="text-sm text-gray-600">Diseñadora Freelance</p>
+              </div>
+            </div>
+            <div className="flex gap-1 mb-3">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="text-yellow-400 text-lg">⭐</span>
+              ))}
+            </div>
+            <p className="text-gray-700 italic">
+              "Increíble herramienta para compartir mi portafolio. Mis clientes pueden ver todo mi trabajo con solo escanear un código QR. ¡Me encanta!"
+            </p>
+          </Card>
+
+          {/* Testimonio 2 */}
+          <Card className="p-8 bg-white border-2 border-gray-100 rounded-2xl hover:shadow-xl transition-all">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl">C</span>
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900">Carlos Méndez</h4>
+                <p className="text-sm text-gray-600">Dueño de Restaurante</p>
+              </div>
+            </div>
+            <div className="flex gap-1 mb-3">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="text-yellow-400 text-lg">⭐</span>
+              ))}
+            </div>
+            <p className="text-gray-700 italic">
+              "Puse un código QR en cada mesa y ahora los clientes ven el menú digital al instante. Super profesional y fácil de actualizar."
+            </p>
+          </Card>
+
+          {/* Testimonio 3 */}
+          <Card className="p-8 bg-white border-2 border-gray-100 rounded-2xl hover:shadow-xl transition-all">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl">A</span>
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900">Ana Rodríguez</h4>
+                <p className="text-sm text-gray-600">Agente de Bienes Raíces</p>
+              </div>
+            </div>
+            <div className="flex gap-1 mb-3">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="text-yellow-400 text-lg">⭐</span>
+              ))}
+            </div>
+            <p className="text-gray-700 italic">
+              "Perfecto para networking. Comparto mi tarjeta digital en eventos y todos pueden guardar mi contacto sin necesidad de aplicaciones."
+            </p>
+          </Card>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 mt-20">
         <div className="container mx-auto px-4 text-center text-gray-600">
