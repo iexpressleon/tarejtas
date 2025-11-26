@@ -49,6 +49,9 @@ export default function AdminDashboard() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [paymentMessage, setPaymentMessage] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
+  
+  // User visits state
+  const [userVisits, setUserVisits] = useState({});
 
   useEffect(() => {
     loadData();
