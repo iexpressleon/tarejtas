@@ -62,21 +62,17 @@ export default function Landing() {
       <section className="container mx-auto px-4 py-20 text-center">
         <div className="max-w-4xl mx-auto space-y-8">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
-            Tu tarjeta de presentación
-            <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              digital y moderna
-            </span>
+            {t('landing.hero_title')}
           </h1>
           
           {/* Pricing Banner */}
           <div className="inline-block bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl shadow-lg">
-            <div className="text-3xl font-bold mb-1">🎉 30 días GRATIS</div>
+            <div className="text-3xl font-bold mb-1">🎉 {t('landing.trial_text')}</div>
             <div className="text-lg">Después solo $300 pesos al año</div>
           </div>
           
           <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
-            Crea tu perfil profesional en minutos. Comparte tu información de contacto,
-            redes sociales y enlaces importantes con un solo link.
+            {t('landing.hero_subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Button
@@ -85,7 +81,7 @@ export default function Landing() {
               onClick={() => navigate("/registro")}
               className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg rounded-xl hover:scale-105 transition-all shadow-lg"
             >
-              Crear tarjeta gratis
+              {t('landing.cta_primary')}
             </Button>
             <Button
               data-testid="demo-btn"
