@@ -43,16 +43,19 @@ export default function Landing() {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
             <span className="text-white font-bold text-xl">T</span>
           </div>
-          <span className="text-2xl font-bold text-gray-900">TarjetaQR.app</span>
+          <span className="text-2xl font-bold text-gray-900">{t('landing.title')}</span>
         </div>
-        <Button
-          data-testid="header-login-btn"
-          variant="outline"
-          onClick={() => navigate("/registro")}
-          className="hover:scale-105 transition-transform"
-        >
-          Iniciar sesión
-        </Button>
+        <div className="flex items-center gap-4">
+          <LanguageSelector variant="compact" />
+          <Button
+            data-testid="header-login-btn"
+            variant="outline"
+            onClick={() => navigate("/registro")}
+            className="hover:scale-105 transition-transform"
+          >
+            {t('auth.login')}
+          </Button>
+        </div>
       </header>
 
       {/* Hero Section */}
