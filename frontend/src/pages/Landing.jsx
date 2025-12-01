@@ -172,7 +172,6 @@ export default function Landing() {
                   <span className="text-xl ml-2">MXN</span>
                 </div>
                 <p className="text-white/90 mb-6">por año</p>
-                <p className="text-lg mb-6">Solo $25 pesos al mes</p>
                 <ul className="text-left space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <span className="font-bold">✓</span>
