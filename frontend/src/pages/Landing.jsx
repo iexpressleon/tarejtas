@@ -12,10 +12,13 @@ const API = `${BACKEND_URL}/api`;
 export default function Landing() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [visitCount, setVisitCount] = useState(0);
   const { t } = useLanguage();
 
   useEffect(() => {
     checkAuth();
+    loadStats();
+    registerVisit();
   }, []);
 
   const checkAuth = async () => {
@@ -24,6 +27,27 @@ export default function Landing() {
       navigate("/dashboard");
     } catch (error) {
       setIsLoading(false);
+    }
+  };
+
+  const loadStats = async () => {
+    try {
+      const response = await axios.get(`${API}/landing/stats`);
+      setVisitCount(response.data.visit_count || 0);
+    } catch (error) {
+      console.error("Error loading stats:", error);
+    }
+  };
+
+  const registerVisit = async () => {
+    try {
+      // Register visit (fire and forget)
+      await axios.post(`${API}/landing/visit`);
+      // Reload stats after registering
+      setTimeout(loadStats, 500);
+    } catch (error) {
+      // Ignore errors for visit tracking
+      console.error("Error registering visit:", error);
     }
   };
 
