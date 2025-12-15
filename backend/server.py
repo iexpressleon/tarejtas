@@ -198,6 +198,12 @@ class SettingsUpdate(BaseModel):
     payment_message: Optional[str] = None
     whatsapp_number: Optional[str] = None
 
+class PageStats(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "landing_page_stats"  # Single document ID
+    visit_count: int = 0
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # ============ AUTH HELPERS ============
 
 async def get_current_user(request: Request) -> Optional[User]:
