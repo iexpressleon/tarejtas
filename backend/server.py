@@ -971,6 +971,33 @@ async def increment_visit_count(slug: str):
     
     return {"success": True, "message": "Visit count incremented"}
 
+# ============ LANDING PAGE STATS ENDPOINTS ============
+
+@api_router.post("/landing/visit")
+async def increment_landing_visits():
+    """Increment landing page visit count (public endpoint)"""
+    await db.page_stats.update_one(
+        {"id": "landing_page_stats"},
+        {
+            "$inc": {"visit_count": 1},
+            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+        },
+        upsert=True
+    )
+    
+    return {"success": True, "message": "Landing page visit recorded"}
+
+@api_router.get("/landing/stats", response_model=PageStats)
+async def get_landing_stats():
+    """Get landing page statistics (public endpoint)"""
+    stats = await db.page_stats.find_one({"id": "landing_page_stats"})
+    
+    if not stats:
+        # Return default stats if not found
+        return PageStats(id="landing_page_stats", visit_count=0)
+    
+    return PageStats(**stats)
+
 @api_router.post("/tarjetas", response_model=Tarjeta)
 async def create_tarjeta(tarjeta_input: TarjetaCreate, request: Request):
     """Create new tarjeta"""
