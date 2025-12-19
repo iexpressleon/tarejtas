@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,9 +12,11 @@ const API = `${BACKEND_URL}/api`;
 
 export default function Registro() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [visitCount, setVisitCount] = useState(0);
 
   // Form states
   const [name, setName] = useState("");
@@ -23,6 +25,13 @@ export default function Registro() {
 
   useEffect(() => {
     checkAuth();
+    loadStats();
+    registerVisit();
+    
+    // Check for error from OAuth callback
+    if (location.state?.error) {
+      toast.error(location.state.error);
+    }
   }, []);
 
   const checkAuth = async () => {
@@ -32,6 +41,33 @@ export default function Registro() {
     } catch (error) {
       setIsLoading(false);
     }
+  };
+
+  const loadStats = async () => {
+    try {
+      const response = await axios.get(`${API}/register/stats`);
+      setVisitCount(response.data.visit_count || 0);
+    } catch (error) {
+      console.error("Error loading stats:", error);
+    }
+  };
+
+  const registerVisit = async () => {
+    try {
+      // Register visit (fire and forget)
+      await axios.post(`${API}/register/visit`);
+      // Reload stats after registering
+      setTimeout(loadStats, 500);
+    } catch (error) {
+      // Ignore errors for visit tracking
+      console.error("Error registering visit:", error);
+    }
+  };
+
+  // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+  const handleGoogleLogin = () => {
+    const redirectUrl = window.location.origin + '/dashboard';
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
   const handleSubmit = async (e) => {
