@@ -437,10 +437,142 @@ async def logout(request: Request, response: Response):
     """Logout user"""
     session_token = request.cookies.get("session_token")
     if session_token:
-        await db.user_sessions.delete_one({"session_token": session_token})
+        await db.user_sessions.delete_one({"session_token": session_token"}}))
     
     response.delete_cookie(key="session_token", path="/")
     return {"success": True}
+
+@api_router.get("/auth/google/callback")
+async def google_callback(session_id: str, response: Response):
+    """
+    Handle Google OAuth callback from Emergent Auth
+    Exchange session_id for user data and create/update user
+    """
+    try:
+        # Exchange session_id for user data from Emergent Auth
+        async with httpx.AsyncClient() as client:
+            auth_response = await client.get(
+                "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+                headers={"X-Session-ID": session_id},
+                timeout=10.0
+            )
+            
+            if auth_response.status_code != 200:
+                raise HTTPException(status_code=401, detail="Invalid session")
+            
+            user_data = auth_response.json()
+        
+        # Check if user exists by email
+        existing_user = await db.users.find_one({"email": user_data["email"]}, {"_id": 0})
+        
+        if existing_user:
+            # Update existing user info (name, picture if changed)
+            await db.users.update_one(
+                {"email": user_data["email"]},
+                {"$set": {
+                    "name": user_data.get("name", existing_user["name"]),
+                    "picture": user_data.get("picture", existing_user.get("picture", ""))
+                }}
+            )
+            user_id = existing_user["id"]
+        else:
+            # Create new user with Google OAuth
+            user_id = str(uuid.uuid4())
+            trial_ends = datetime.now(timezone.utc) + timedelta(days=30)
+            
+            new_user_data = {
+                "id": user_id,
+                "email": user_data["email"],
+                "name": user_data.get("name", ""),
+                "password_hash": "",  # No password for OAuth users
+                "picture": user_data.get("picture", ""),
+                "plan": "trial",
+                "role": "user",
+                "license_key": str(uuid.uuid4()),
+                "trial_ends_at": trial_ends.isoformat(),
+                "subscription_ends_at": None,
+                "is_active": True,
+                "payment_notified": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.users.insert_one(new_user_data)
+            
+            # Create default tarjeta for new user
+            slug = generate_slug(user_data.get("name", "user"))
+            existing_slug = await db.tarjetas.find_one({"slug": slug})
+            if existing_slug:
+                slug = f"{slug}-{str(uuid.uuid4())[:8]}"
+            
+            tarjeta_data = {
+                "id": str(uuid.uuid4()),
+                "usuario_id": user_id,
+                "slug": slug,
+                "nombre": user_data.get("name", ""),
+                "descripcion": "",
+                "color_tema": "#6366f1",
+                "whatsapp": "",
+                "email": user_data["email"],
+                "telefono": "",
+                "foto_url": user_data.get("picture", ""),
+                "foto_forma": "circular",
+                "qr_url": "",
+                "archivo_negocio": "",
+                "archivo_negocio_tipo": "",
+                "archivo_negocio_nombre": "",
+                "archivo_negocio_titulo": "",
+                "instagram_url": "",
+                "instagram_visible": True,
+                "facebook_url": "",
+                "facebook_visible": True,
+                "tiktok_url": "",
+                "tiktok_visible": True,
+                "google_maps": "",
+                "google_maps_visible": True,
+                "plantilla_id": 1,
+                "visit_count": 0,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.tarjetas.insert_one(tarjeta_data)
+        
+        # Create new session
+        session_token = user_data["session_token"]
+        expires_at = datetime.now(timezone.utc) + timedelta(days=7)
+        
+        session_data = {
+            "user_id": user_id,
+            "session_token": session_token,
+            "expires_at": expires_at.isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.user_sessions.insert_one(session_data)
+        
+        # Set httpOnly cookie
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            httponly=True,
+            secure=True,
+            samesite="none",
+            path="/",
+            max_age=7*24*60*60,
+            domain=None
+        )
+        
+        # Get complete user info
+        user = await db.users.find_one({"id": user_id}, {"_id": 0})
+        
+        return {
+            "success": True,
+            "user": user,
+            "session_token": session_token
+        }
+        
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="Authentication service timeout")
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=503, detail=f"Authentication service error: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing authentication: {str(e)}")
 
 # ============ ADMIN ENDPOINTS ============
 
