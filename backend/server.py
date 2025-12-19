@@ -1173,6 +1173,92 @@ async def get_register_stats():
     
     return RegisterPageStats(**stats)
 
+# ============ TEMPLATES ENDPOINTS ============
+
+# Template definitions
+TEMPLATES = [
+    {
+        "id": 1,
+        "name": "Clásica",
+        "description": "Diseño centrado y minimalista, perfecto para cualquier profesional",
+        "preview_url": "/templates/preview-1.png",
+        "is_premium": False,
+        "category": "minimal",
+        "features": ["Diseño limpio", "Fácil de leer", "Profesional"]
+    },
+    {
+        "id": 2,
+        "name": "Profesional",
+        "description": "Layout corporativo con foto lateral, ideal para ejecutivos",
+        "preview_url": "/templates/preview-2.png",
+        "is_premium": False,
+        "category": "professional",
+        "features": ["Foto lateral", "Corporativo", "Elegante"]
+    },
+    {
+        "id": 3,
+        "name": "Moderna",
+        "description": "Diseño con gradientes y estilo card contemporáneo",
+        "preview_url": "/templates/preview-3.png",
+        "is_premium": False,
+        "category": "modern",
+        "features": ["Gradientes", "Contemporáneo", "Atractivo"]
+    },
+    {
+        "id": 4,
+        "name": "Elegante",
+        "description": "Diseño sofisticado con animaciones sutiles",
+        "preview_url": "/templates/preview-4.png",
+        "is_premium": True,
+        "category": "elegant",
+        "features": ["Animaciones", "Sofisticado", "Premium"]
+    },
+    {
+        "id": 5,
+        "name": "Creativa",
+        "description": "Layout asimétrico y colorido para creativos",
+        "preview_url": "/templates/preview-5.png",
+        "is_premium": True,
+        "category": "creative",
+        "features": ["Asimétrico", "Colorido", "Único"]
+    },
+    {
+        "id": 6,
+        "name": "Minimalista",
+        "description": "Ultra limpio, inspirado en el diseño japonés",
+        "preview_url": "/templates/preview-6.png",
+        "is_premium": True,
+        "category": "minimal",
+        "features": ["Zen", "Espacioso", "Elegante"]
+    },
+    {
+        "id": 7,
+        "name": "Vibrante",
+        "description": "Colores llamativos, perfecto para artistas y creativos",
+        "preview_url": "/templates/preview-7.png",
+        "is_premium": True,
+        "category": "vibrant",
+        "features": ["Colorido", "Energético", "Llamativo"]
+    }
+]
+
+@api_router.get("/templates", response_model=List[Template])
+async def get_all_templates():
+    """Get all available templates"""
+    return [Template(**t) for t in TEMPLATES]
+
+@api_router.get("/templates/available", response_model=List[Template])
+async def get_available_templates(request: Request):
+    """Get templates available for current user based on their plan"""
+    user = await require_auth(request)
+    
+    if user.plan == "paid":
+        # Paid users get all templates
+        return [Template(**t) for t in TEMPLATES]
+    else:
+        # Trial users only get free templates
+        return [Template(**t) for t in TEMPLATES if not t["is_premium"]]
+
 @api_router.post("/tarjetas", response_model=Tarjeta)
 async def create_tarjeta(tarjeta_input: TarjetaCreate, request: Request):
     """Create new tarjeta"""
