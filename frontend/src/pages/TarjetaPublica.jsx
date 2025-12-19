@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import axios from "axios";
 import ContentModal from "@/components/ContentModal";
+import Template1 from "@/components/templates/Template1";
+import Template2 from "@/components/templates/Template2";
+import Template3 from "@/components/templates/Template3";
+import Template4 from "@/components/templates/Template4";
+import Template5 from "@/components/templates/Template5";
+import Template6 from "@/components/templates/Template6";
+import Template7 from "@/components/templates/Template7";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
