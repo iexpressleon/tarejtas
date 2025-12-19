@@ -1136,6 +1136,33 @@ async def get_landing_stats():
     
     return PageStats(**stats)
 
+# ============ REGISTER PAGE STATS ENDPOINTS ============
+
+@api_router.post("/register/visit")
+async def increment_register_visits():
+    """Increment register page visit count (public endpoint)"""
+    await db.page_stats.update_one(
+        {"id": "register_page_stats"},
+        {
+            "$inc": {"visit_count": 1},
+            "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+        },
+        upsert=True
+    )
+    
+    return {"success": True, "message": "Register page visit recorded"}
+
+@api_router.get("/register/stats", response_model=RegisterPageStats)
+async def get_register_stats():
+    """Get register page statistics (public endpoint)"""
+    stats = await db.page_stats.find_one({"id": "register_page_stats"})
+    
+    if not stats:
+        # Return default stats if not found
+        return RegisterPageStats(id="register_page_stats", visit_count=0)
+    
+    return RegisterPageStats(**stats)
+
 @api_router.post("/tarjetas", response_model=Tarjeta)
 async def create_tarjeta(tarjeta_input: TarjetaCreate, request: Request):
     """Create new tarjeta"""
