@@ -145,6 +145,33 @@ export default function TarjetaPublica() {
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   };
+
+  const handleWhatsAppClick = (whatsapp) => {
+    if (whatsapp) {
+      const cleanNumber = whatsapp.replace(/[^0-9]/g, "");
+      if (cleanNumber.length < 10) return;
+      const whatsappUrl = `https://wa.me/${cleanNumber}`;
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const handleEmailClick = (email) => {
+    if (email) {
+      window.location.href = `mailto:${email}`;
+    }
+  };
+
+  const handlePhoneClick = (telefono) => {
+    if (telefono) {
+      window.location.href = `tel:${telefono}`;
+    }
+  };
+
+  const handleEnlaceClick = (url) => {
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
   
   const handleArchivoClick = () => {
     if (tarjeta?.archivo_negocio) {
