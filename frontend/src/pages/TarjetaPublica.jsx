@@ -188,9 +188,56 @@ export default function TarjetaPublica() {
   }
 
   const colorTema = tarjeta?.color_tema || "#6366f1";
-  const isFree = true; // Assuming all are free for now
+
+  // Template props
+  const templateProps = {
+    tarjeta,
+    enlaces,
+    handleWhatsAppClick,
+    handleEmailClick,
+    handlePhoneClick,
+    handleEnlaceClick,
+    handleSaveContact
+  };
+
+  // Render the appropriate template based on plantilla_id
+  const renderTemplate = () => {
+    const templateId = tarjeta?.plantilla_id || 1;
+    
+    switch(templateId) {
+      case 1:
+        return <Template1 {...templateProps} />;
+      case 2:
+        return <Template2 {...templateProps} />;
+      case 3:
+        return <Template3 {...templateProps} />;
+      case 4:
+        return <Template4 {...templateProps} />;
+      case 5:
+        return <Template5 {...templateProps} />;
+      case 6:
+        return <Template6 {...templateProps} />;
+      case 7:
+        return <Template7 {...templateProps} />;
+      default:
+        return <Template1 {...templateProps} />;
+    }
+  };
 
   return (
+    <>
+      {renderTemplate()}
+      
+      <ContentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        type={modalType}
+        content={modalContent}
+        title={modalTitle}
+      />
+    </>
+  );
+}
     <div
       className="min-h-screen flex items-center justify-center p-4"
       style={{
