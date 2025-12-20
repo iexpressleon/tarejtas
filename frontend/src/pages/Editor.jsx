@@ -826,6 +826,15 @@ export default function Editor() {
           </div>
         </div>
       </main>
+      
+      {/* Template Gallery Modal */}
+      <TemplateGallery
+        isOpen={showTemplateGallery}
+        onClose={() => setShowTemplateGallery(false)}
+        currentTemplateId={plantillaId}
+        onSelectTemplate={handleTemplateSelect}
+        userPlan={user?.plan || "trial"}
+      />
     </div>
   );
 }
