@@ -184,14 +184,15 @@ export default function Editor() {
           archivo_negocio_tipo: archivoNegocioTipo,
           archivo_negocio_nombre: archivoNegocioNombre,
           archivo_negocio_titulo: archivoNegocioTitulo,
-          instagram,
+          instagram_url: instagram,
           instagram_visible: instagramVisible,
-          facebook,
+          facebook_url: facebook,
           facebook_visible: facebookVisible,
-          tiktok,
+          tiktok_url: tiktok,
           tiktok_visible: tiktokVisible,
           google_maps: googleMaps,
           google_maps_visible: googleMapsVisible,
+          plantilla_id: plantillaId,
         },
         { withCredentials: true }
       );
