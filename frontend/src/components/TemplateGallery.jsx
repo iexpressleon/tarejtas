@@ -15,7 +15,10 @@ const TEMPLATE_PREVIEWS = {
   4: "https://via.placeholder.com/300x400/1f2937/ffffff?text=Elegante",
   5: "https://via.placeholder.com/300x400/f59e0b/ffffff?text=Creativa",
   6: "https://via.placeholder.com/300x400/ffffff/000000?text=Minimalista",
-  7: "https://via.placeholder.com/300x400/ef4444/ffffff?text=Vibrante"
+  7: "https://via.placeholder.com/300x400/ef4444/ffffff?text=Vibrante",
+  8: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=300&h=400&fit=crop",
+  9: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=300&h=400&fit=crop",
+  10: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&h=400&fit=crop"
 };
 
 export default function TemplateGallery({ isOpen, onClose, currentTemplateId, onSelectTemplate, userPlan }) {
