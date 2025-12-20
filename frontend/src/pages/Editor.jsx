@@ -312,6 +312,29 @@ export default function Editor() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Editor Form */}
           <div className="space-y-6">
+            {/* Template Selector */}
+            <Card className="p-6 bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-2xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">Plantilla de Diseño</h3>
+                  <p className="text-sm text-gray-600">Personaliza el estilo de tu tarjeta</p>
+                </div>
+                <Button
+                  onClick={() => setShowTemplateGallery(true)}
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                >
+                  🎨 Cambiar Plantilla
+                </Button>
+              </div>
+              {plantillaId && (
+                <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-white border-2 border-indigo-300 font-medium">
+                    Plantilla #{plantillaId}
+                  </span>
+                </div>
+              )}
+            </Card>
+            
             <Card className="p-6 bg-white/80 backdrop-blur-sm border-2 border-gray-100 rounded-2xl">
               <h2 className="text-2xl font-bold mb-6">Datos básicos</h2>
               <div className="space-y-4">
