@@ -154,6 +154,16 @@ export default function Editor() {
     toast.success("Archivo eliminado");
   };
 
+  const handleTemplateSelect = async (templateId) => {
+    try {
+      setPlantillaId(templateId);
+      toast.success("Plantilla seleccionada. Guarda los cambios para aplicarla.");
+    } catch (error) {
+      console.error("Error selecting template:", error);
+      toast.error("Error al seleccionar plantilla");
+    }
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
