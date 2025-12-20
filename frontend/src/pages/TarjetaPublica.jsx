@@ -239,6 +239,12 @@ export default function TarjetaPublica() {
         return <Template6 {...templateProps} />;
       case 7:
         return <Template7 {...templateProps} />;
+      case 8:
+        return <Template8 {...templateProps} />;
+      case 9:
+        return <Template9 {...templateProps} />;
+      case 10:
+        return <Template10 {...templateProps} />;
       default:
         return <Template1 {...templateProps} />;
     }
