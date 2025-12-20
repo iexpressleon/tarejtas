@@ -56,13 +56,17 @@ export default function Editor() {
 
   const loadData = async () => {
     try {
-      const [tarjetaRes, enlacesRes] = await Promise.all([
+      const [userRes, tarjetaRes, enlacesRes] = await Promise.all([
+        axios.get(`${API}/auth/me`, { withCredentials: true }),
         axios.get(`${API}/tarjetas/${id}`, { withCredentials: true }),
         axios.get(`${API}/enlaces/${id}`, { withCredentials: true }),
       ]);
 
+      setUser(userRes.data);
+      
       const t = tarjetaRes.data;
       setTarjeta(t);
+      setPlantillaId(t.plantilla_id || 1);
       setNombre(t.nombre);
       setDescripcion(t.descripcion || "");
       setColorTema(t.color_tema || "#6366f1");
@@ -78,11 +82,11 @@ export default function Editor() {
       setArchivoNegocioNombre(t.archivo_negocio_nombre || "");
       setArchivoNegocioTitulo(t.archivo_negocio_titulo || "");
       // Social media
-      setInstagram(t.instagram || "");
+      setInstagram(t.instagram_url || "");
       setInstagramVisible(t.instagram_visible !== false);
-      setFacebook(t.facebook || "");
+      setFacebook(t.facebook_url || "");
       setFacebookVisible(t.facebook_visible !== false);
-      setTiktok(t.tiktok || "");
+      setTiktok(t.tiktok_url || "");
       setTiktokVisible(t.tiktok_visible !== false);
       setGoogleMaps(t.google_maps || "");
       setGoogleMapsVisible(t.google_maps_visible !== false);
