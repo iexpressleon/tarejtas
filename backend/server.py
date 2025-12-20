@@ -1241,6 +1241,33 @@ TEMPLATES = [
         "is_premium": True,
         "category": "vibrant",
         "features": ["Colorido", "Energético", "Llamativo"]
+    },
+    {
+        "id": 8,
+        "name": "Restaurante",
+        "description": "Con fondo culinario para negocios gastronómicos",
+        "preview_url": "/templates/preview-8.png",
+        "is_premium": True,
+        "category": "restaurant",
+        "features": ["Fondo temático", "Gastronómico", "Profesional"]
+    },
+    {
+        "id": 9,
+        "name": "Belleza",
+        "description": "Diseño beauty para salones y estéticas",
+        "preview_url": "/templates/preview-9.png",
+        "is_premium": True,
+        "category": "beauty",
+        "features": ["Fondo beauty", "Elegante", "Femenino"]
+    },
+    {
+        "id": 10,
+        "name": "Fitness",
+        "description": "Diseño deportivo para gimnasios y entrenadores",
+        "preview_url": "/templates/preview-10.png",
+        "is_premium": True,
+        "category": "fitness",
+        "features": ["Fondo deportivo", "Energético", "Motivador"]
     }
 ]
 
