@@ -50,17 +50,13 @@ export default function Editor() {
 
   const loadData = async () => {
     try {
-      const [userRes, tarjetaRes, enlacesRes] = await Promise.all([
-        axios.get(`${API}/auth/me`, { withCredentials: true }),
+      const [tarjetaRes, enlacesRes] = await Promise.all([
         axios.get(`${API}/tarjetas/${id}`, { withCredentials: true }),
         axios.get(`${API}/enlaces/${id}`, { withCredentials: true }),
       ]);
 
-      setUser(userRes.data);
-      
       const t = tarjetaRes.data;
       setTarjeta(t);
-      setPlantillaId(t.plantilla_id || 1);
       setNombre(t.nombre);
       setDescripcion(t.descripcion || "");
       setColorTema(t.color_tema || "#6366f1");
