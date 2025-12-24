@@ -212,16 +212,6 @@ class RegisterPageStats(BaseModel):
     visit_count: int = 0
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-class Template(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: int
-    name: str
-    description: str
-    preview_url: str
-    is_premium: bool
-    category: str  # "professional", "creative", "minimal", etc.
-    features: List[str]
-
 # ============ AUTH HELPERS ============
 
 async def get_current_user(request: Request) -> Optional[User]:
