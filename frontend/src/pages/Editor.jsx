@@ -172,7 +172,6 @@ export default function Editor() {
           tiktok_visible: tiktokVisible,
           google_maps: googleMaps,
           google_maps_visible: googleMapsVisible,
-          plantilla_id: plantillaId,
         },
         { withCredentials: true }
       );
