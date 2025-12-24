@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import TemplateGallery from "@/components/TemplateGallery";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -19,11 +18,6 @@ export default function Editor() {
   const [isSaving, setIsSaving] = useState(false);
   const [tarjeta, setTarjeta] = useState(null);
   const [enlaces, setEnlaces] = useState([]);
-  const [user, setUser] = useState(null);
-  
-  // Template gallery state
-  const [showTemplateGallery, setShowTemplateGallery] = useState(false);
-  const [plantillaId, setPlantillaId] = useState(1);
 
   // Form states
   const [nombre, setNombre] = useState("");
